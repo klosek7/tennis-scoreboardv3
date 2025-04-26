@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel kontrolny - Tenis</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/control.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Panel kontrolny meczu tenisowego</h1>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="setup">Ustawienia</div>
+            <div class="tab disabled" data-tab="match">Mecz</div>
+            <div class="tab" data-tab="history">Historia</div>
+        </div>
+        
+        <!-- Tab: Ustawienia meczu -->
+        <div class="tab-content active" id="tab-setup">
+            <div class="match-status" id="match-status-indicator">
+                Brak aktywnego meczu. Skonfiguruj nowy mecz poniżej.
+            </div>
+            
+            <div class="section">
+                <h2>Nowy mecz</h2>
+                
+                <div class="form-group">
+                    <label for="player1-name">Zawodnik 1:</label>
+                    <input type="text" id="player1-name" placeholder="Imię zawodnika 1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="player2-name">Zawodnik 2:</label>
+                    <input type="text" id="player2-name" placeholder="Imię zawodnika 2">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sets-to-win">Format meczu:</label>
+                    <select id="sets-to-win">
+                        <option value="1">Do 1 wygranego seta</option>
+                        <option value="2" selected>Do 2 wygranych setów</option>
+                        <option value="3">Do 3 wygranych setów</option>
+                    </select>
+                </div>
+                
+                <div class="form-group switch-container">
+                    <label>Zasada przewag przy 40:40:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="advantage-rule" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div class="help-text">
+                        Włączone: standardowe zasady z przewagami (AD)<br>
+                        Wyłączone: decydujący punkt przy 40:40
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Kto rozpoczyna serwis:</label>
+                    <select id="serving-player">
+                        <option value="1" selected>Zawodnik 1</option>
+                        <option value="2">Zawodnik 2</option>
+                    </select>
+                </div>
+                
+                <button id="start-match-btn">ROZPOCZNIJ NOWY MECZ</button>
+            </div>
+
+            <div class="section">
+                <h2>Wygląd tablicy wyników</h2>
+                
+                <div class="form-group">
+                    <label for="theme-select">Motyw:</label>
+                    <select id="theme-select">
+                        <option value="default">Domyślny</option>
+                        <option value="wimbledon">Wimbledon</option>
+                        <option value="roland-garros">Roland Garros</option>
+                        <option value="us-open">US Open</option>
+                        <option value="australian-open">Australian Open</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="logo-url">URL logo (opcjonalnie):</label>
+                    <input type="text" id="logo-url" placeholder="https://example.com/logo.png">
+                </div>
+                
+                <div class="form-group">
+                    <label>Niestandardowe kolory:</label>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 5px;">
+                        <div style="flex: 1;">
+                            <label for="primary-color" style="font-weight: normal;">Zawodnik 1:</label>
+                            <input type="color" id="primary-color" value="#1e90ff" style="width: 100%;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="secondary-color" style="font-weight: normal;">Zawodnik 2:</label>
+                            <input type="color" id="secondary-color" value="#dc143c" style="width: 100%;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="bg-color" style="font-weight: normal;">Tło:</label>
+                            <input type="color" id="bg-color" value="#000000" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group switch-container">
+                    <label>Animacje:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="animations-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <button id="update-appearance-btn" class="action-btn">Zastosuj zmiany</button>
+
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <button onclick="resetAppearance()" class="danger">Resetuj ustawienia wyglądu</button>
+                </div>
+
+                
+            </div>
+            
+            <div class="section">
+                <h2>Poprzednie mecze</h2>
+                <div id="previous-matches">
+                    <p>Ładowanie poprzednich meczów...</p>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Resetowanie danych</h2>
+                <p>Wybierz opcję resetowania danych meczu:</p>
+                
+                <div class="form-group">
+                    <button onclick="resetMatchData(false)" class="warning">Resetuj dane (zachowaj aktywny mecz)</button>
+                </div>
+                
+                <div class="form-group">
+                    <button onclick="resetMatchData(true)" class="danger">Resetuj dane i zakończ mecz</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab: Aktualny mecz -->
+        <div class="tab-content" id="tab-match">
+            <div class="section">
+                <div class="match-info-display">
+                    <div class="match-time">
+                        <div>Czas meczu</div>
+                        <div id="control-match-time">00:00</div>
+                    </div>
+                    <div class="set-time">
+                        <div>Aktualny set</div>
+                        <div id="control-set-time">00:00</div>
+                    </div>
+                </div>
+                
+                <div class="score-display">
+                    <div class="player-score">
+                        <div class="player-name" id="score-player1-name">
+                            <span id="control-serving1" style="display: none;">⚪</span>
+                            Zawodnik 1
+                            <span id="control-winner1" style="display: none;">👑</span>
+                        </div>
+                        <div class="points" id="score-player1-points">0</div>
+                        <div class="game-set">
+                            Gemy: <span id="score-player1-games">0</span>
+                        </div>
+                        <div class="sets">
+                            Sety: <span id="score-player1-set0">0</span> / <span id="score-player1-set1">0</span> / <span id="score-player1-set2">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="player-score">
+                        <div class="player-name" id="score-player2-name">
+                            <span id="control-serving2" style="display: none;">⚪</span>
+                            Zawodnik 2
+                            <span id="control-winner2" style="display: none;">👑</span>
+                        </div>
+                        <div class="points" id="score-player2-points">0</div>
+                        <div class="game-set">
+                            Gemy: <span id="score-player2-games">0</span>
+                        </div>
+                        <div class="sets">
+                            Sety: <span id="score-player2-set0">0</span> / <span id="score-player2-set1">0</span> / <span id="score-player2-set2">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <button style="width: 48%;" onclick="updateScore('toggle_serving', 0)">
+                        Zmień serwującego
+                    </button>
+                    <button id="end-match-btn" style="width: 48%;" onclick="endMatch()">
+                        Zakończ mecz
+                    </button>
+                </div>
+                
+                <h3>Punkty</h3>
+                <div class="player-controls">
+                    <div class="player-column">
+                        <button id="add-point-btn1" onclick="updateScore('add_point', 1)">Punkt dla Zawodnika 1</button>
+                        <button id="remove-point-btn1" onclick="updateScore('remove_point', 1)">Cofnij punkt</button>
+                    </div>
+                    <div class="player-column">
+                        <button id="add-point-btn2" onclick="updateScore('add_point', 2)">Punkt dla Zawodnika 2</button>
+                        <button id="remove-point-btn2" onclick="updateScore('remove_point', 2)">Cofnij punkt</button>
+                    </div>
+                </div>
+                
+                <h3>Gemy</h3>
+                <div class="player-controls">
+                    <div class="player-column">
+                        <button id="add-game-btn1" onclick="updateScore('add_game', 1)">Gem dla Zawodnika 1</button>
+                        <button id="remove-game-btn1" onclick="updateScore('remove_game', 1)">Cofnij gem</button>
+                    </div>
+                    <div class="player-column">
+                        <button id="add-game-btn2" onclick="updateScore('add_game', 2)">Gem dla Zawodnika 2</button>
+                        <button id="remove-game-btn2" onclick="updateScore('remove_game', 2)">Cofnij gem</button>
+                    </div>
+                </div>
+                
+                <button id="reset-btn" class="danger" onclick="resetScore()">RESETUJ WYNIK</button>
+                
+                <div style="margin-top: 15px; text-align: center;">
+                    <button style="width: auto; display: inline-block;" onclick="showHistoryTab()">Zobacz historię</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab: Historia meczu -->
+        <div class="tab-content" id="tab-history">
+            <div class="section">
+                <h2>Historia aktualnego meczu</h2>
+                <div id="match-info-header">
+                    <!-- Tutaj będą dane o meczu -->
+                </div>
+                <div class="match-history" id="match-history">
+                    <p>Brak historii dla aktualnego meczu.</p>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <button style="width: auto; display: inline-block;" onclick="backToMatchTab()">Powrót do meczu</button>
+                </div>
+            </div>
+            <div style="margin-top: 15px;">
+                <a href="#" id="stats-link" target="_blank" style="display: inline-block; padding: 10px 15px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px;">
+                    Zobacz szczegółowe statystyki
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/control.js"></script>
+</body>
+</html>

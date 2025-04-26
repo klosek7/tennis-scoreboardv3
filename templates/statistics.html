@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statystyki meczu</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/statistics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="panel header-panel">
+            <h1 id="match-title">Statystyki meczu</h1>
+            <div id="match-info"></div>
+            
+            <div class="export-buttons">
+                <a href="#" class="export-button" id="export-csv">Eksportuj do CSV</a>
+                <a href="#" class="export-button" id="export-pdf">Eksportuj do PDF</a>
+            </div>
+            
+            <div>
+                <a href="/" class="button">Powrót do strony głównej</a>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Podsumowanie</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div>Czas meczu</div>
+                    <div class="stat-value" id="match-duration">00:00</div>
+                </div>
+                <div class="stat-card">
+                    <div>Łączna liczba punktów</div>
+                    <div class="stat-value" id="total-points">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Najdłuższy gem</div>
+                    <div class="stat-value" id="longest-game">00:00</div>
+                </div>
+                <div class="stat-card">
+                    <div>Średni czas gema</div>
+                    <div class="stat-value" id="avg-game-time">00:00</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Porównanie zawodników</h2>
+            <div class="player-comparison">
+                <div class="player-column">
+                    <h3 id="p1-name">Zawodnik 1</h3>
+                    <div class="stat-value" id="p1-points-won">0</div>
+                    <div>punktów</div>
+                </div>
+                <div class="player-column">
+                    <h3 id="p2-name">Zawodnik 2</h3>
+                    <div class="stat-value" id="p2-points-won">0</div>
+                    <div>punktów</div>
+                </div>
+            </div>
+            
+            <h3>Procent wygranych punktów</h3>
+            <div class="progress-container">
+                <div class="progress-bar-container">
+                    <div class="progress-bar p1-bar" id="p1-points-pct" style="width: 50%"></div>
+                </div>
+                <div class="progress-labels">
+                    <div id="p1-pct-label">50%</div>
+                    <div id="p2-pct-label">50%</div>
+                </div>
+            </div>
+            
+            <h3>Wygrane gemy</h3>
+            <div class="games-comparison">
+                <div id="p1-games" class="game-count">0</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar p1-bar" id="p1-games-pct" style="width: 50%"></div>
+                </div>
+                <div id="p2-games" class="game-count">0</div>
+            </div>
+            
+            <h3>Wygrane sety</h3>
+            <div class="sets-container">
+                <div id="sets-result" class="sets-result">0 : 0</div>
+                <div id="sets-detail" class="sets-detail"></div>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Analiza meczu</h2>
+            <div class="chart-container">
+                <canvas id="points-chart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="time-chart"></canvas>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Historia punktacji</h2>
+            <div id="match-history">
+                <table id="history-table">
+                    <thead>
+                        <tr>
+                            <th>Czas</th>
+                            <th>Akcja</th>
+                            <th>Stan punktowy</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <!-- Historia będzie wstawiona przez JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/statistics.js"></script>
+</body>
+</html>

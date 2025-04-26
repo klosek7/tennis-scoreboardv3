@@ -1,0 +1,908 @@
+{
+    "id": "31843e1e-4324-407b-8fcb-22c8b1559ab7",
+    "player1": "a",
+    "player2": "v",
+    "date": "2025-04-25 23:28:49",
+    "sets_to_win": 2,
+    "advantage_rule": true,
+    "serving_player": 1,
+    "current_set": 2,
+    "is_tiebreak": false,
+    "winner": 1,
+    "score": {
+        "player1": {
+            "sets": [
+                6,
+                6,
+                0
+            ],
+            "games": 0,
+            "points": "0",
+            "tiebreak_points": 0
+        },
+        "player2": {
+            "sets": [
+                0,
+                0,
+                0
+            ],
+            "games": 0,
+            "points": "0",
+            "tiebreak_points": 0
+        }
+    },
+    "time": {
+        "start": "2025-04-25 23:28:49",
+        "end": "2025-04-25 23:30:06",
+        "duration": 77.050429,
+        "sets": [
+            {
+                "start": "2025-04-25 23:28:49",
+                "end": "2025-04-25 23:29:50",
+                "duration": 61.879917
+            },
+            {
+                "start": "2025-04-25 23:29:50",
+                "end": "2025-04-25 23:30:06",
+                "duration": 16.050429
+            }
+        ],
+        "current_game_start": "2025-04-25 23:30:06"
+    },
+    "history": [
+        {
+            "action": "match_created",
+            "timestamp": "23:28:49"
+        },
+        {
+            "timestamp": "23:29:35",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:39",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:40",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:41",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:41",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:28:49",
+                "end": "2025-04-25 23:29:41",
+                "duration": 52.070144,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:29:42",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:43",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:43",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:44",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:44",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:29:41",
+                "end": "2025-04-25 23:29:44",
+                "duration": 3.222555,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:29:44",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:44",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:44",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:45",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:45",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:29:44",
+                "end": "2025-04-25 23:29:45",
+                "duration": 1.044234,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:29:45",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:45",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:45",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:46",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:46",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:29:45",
+                "end": "2025-04-25 23:29:46",
+                "duration": 1.398268,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:29:46",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:46",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:47",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:47",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:47",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:29:46",
+                "end": "2025-04-25 23:29:47",
+                "duration": 1.383707,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:29:47",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:48",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:49",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:50",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 1,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:50",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:29:47",
+                "end": "2025-04-25 23:29:50",
+                "duration": 3.879917,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:29:50",
+            "action": "set_completed",
+            "set_number": 1,
+            "duration": 61.879917,
+            "player1_games": 6,
+            "player2_games": 0
+        },
+        {
+            "timestamp": "23:29:52",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:54",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:55",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:59",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 0,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:29:59",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:29:50",
+                "end": "2025-04-25 23:29:59",
+                "duration": 9.534145,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:30:00",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:00",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:01",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:01",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 1,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:01",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:29:59",
+                "end": "2025-04-25 23:30:01",
+                "duration": 2.355072,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:30:01",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:01",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:02",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:02",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 2,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:02",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:30:01",
+                "end": "2025-04-25 23:30:02",
+                "duration": 1.466205,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:30:02",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:02",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:03",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:03",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 3,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:03",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:30:02",
+                "end": "2025-04-25 23:30:03",
+                "duration": 1.45343,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:30:03",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:04",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:04",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:04",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 4,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:04",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:30:03",
+                "end": "2025-04-25 23:30:04",
+                "duration": 1.766641,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:30:05",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "0",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:05",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "15",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:05",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "30",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:06",
+            "action": "add_point",
+            "player": 1,
+            "state_before": {
+                "player1_points": "40",
+                "player2_points": "0",
+                "player1_games": 5,
+                "player2_games": 0,
+                "current_set": 2,
+                "is_tiebreak": false
+            }
+        },
+        {
+            "timestamp": "23:30:06",
+            "action": "game_completed",
+            "game_info": {
+                "start": "2025-04-25 23:30:04",
+                "end": "2025-04-25 23:30:06",
+                "duration": 2.050429,
+                "player1_points": "0",
+                "player2_points": "0"
+            }
+        },
+        {
+            "timestamp": "23:30:06",
+            "action": "set_completed",
+            "set_number": 2,
+            "duration": 16.050429,
+            "player1_games": 6,
+            "player2_games": 0
+        },
+        {
+            "timestamp": "23:30:06",
+            "action": "match_completed",
+            "winner": 1,
+            "duration": 77.050429,
+            "final_score": {
+                "player1_sets": 2,
+                "player2_sets": 0,
+                "sets_detail": [
+                    {
+                        "player1_games": 6,
+                        "player2_games": 0
+                    },
+                    {
+                        "player1_games": 6,
+                        "player2_games": 0
+                    }
+                ]
+            }
+        }
+    ],
+    "appearance": {
+        "theme": "us-open",
+        "logo_url": "https://images.seeklogo.com/logo-png/48/1/atm-link-logo-png_seeklogo-484151.png",
+        "custom_colors": {
+            "primary": "rgba(30, 144, 255, 0.7)",
+            "secondary": "rgba(208, 128, 144, 0.7)",
+            "background": "rgba(0, 0, 0, 0.8)"
+        },
+        "animations": true
+    },
+    "statistics": {
+        "points_won": {
+            "player1": 0,
+            "player2": 0
+        },
+        "service_stats": {
+            "player1": {
+                "aces": 0,
+                "double_faults": 0
+            },
+            "player2": {
+                "aces": 0,
+                "double_faults": 0
+            }
+        },
+        "break_points": {
+            "player1": {
+                "faced": 0,
+                "saved": 0,
+                "converted": 0
+            },
+            "player2": {
+                "faced": 0,
+                "saved": 0,
+                "converted": 0
+            }
+        },
+        "game_durations": [
+            52.070144,
+            3.222555,
+            1.044234,
+            1.398268,
+            1.383707,
+            3.879917,
+            9.534145,
+            2.355072,
+            1.466205,
+            1.45343,
+            1.766641,
+            2.050429
+        ],
+        "longest_streak": {
+            "player1": 0,
+            "player2": 0,
+            "current_streak": 0,
+            "current_player": 0
+        }
+    }
+}

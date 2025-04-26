@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System punktacji tenisowej</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>System punktacji tenisowej</h1>
+            <p>Panel administratora transmisji</p>
+        </header>
+        
+        <div class="button-group">
+            <a href="/control" class="button">Panel kontrolny</a>
+            <a href="/scoreboard" target="_blank" class="button">Tablica wyników (OBS)</a>
+        </div>
+        
+        <div class="panel">
+            <h2>Ostatnie mecze</h2>
+            
+            <div id="matches-list">
+                <!-- Lista meczów będzie wstawiona przez JavaScript -->
+                <div class="loading">Ładowanie meczów...</div>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Jak korzystać z systemu</h2>
+            <ol>
+                <li>Otwórz <strong>Panel kontrolny</strong> na swoim telefonie lub tablecie</li>
+                <li>Utwórz nowy mecz i skonfiguruj jego parametry</li>
+                <li>Dodaj <strong>Tablicę wyników</strong> jako źródło przeglądarki w OBS</li>
+                <li>Kontroluj wynik meczu z telefonu podczas transmisji</li>
+                <li>Po meczu przeglądaj i eksportuj statystyki</li>
+            </ol>
+            
+            <div class="tips">
+                <h3>Wskazówki</h3>
+                <ul>
+                    <li>Możesz dostosować wygląd tablicy wyników w zakładce "Ustawienia"</li>
+                    <li>Dodaj logo turnieju, aby spersonalizować transmisję</li>
+                    <li>Dostosuj kolory pod swoją markę lub klub</li>
+                    <li>System działa offline, gdy jesteś w tej samej sieci co serwer</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            System punktacji tenisowej &copy; 2025
+        </footer>
+    </div>
+    
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/index.js"></script>
+</body>
+</html>
