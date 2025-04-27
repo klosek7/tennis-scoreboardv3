@@ -2,13 +2,13 @@ import copy
 import uuid
 from datetime import datetime
 
-# Domyślna konfiguracja meczu
+# Zmiana modelu z 3 setów na 5 setów
 DEFAULT_MATCH = {
     "id": "",
     "player1": "Zawodnik 1",
     "player2": "Zawodnik 2",
     "date": "",
-    "sets_to_win": 2,
+    "sets_to_win": 2,  # Może być 2 lub 3
     "advantage_rule": True,
     "serving_player": 1,
     "current_set": 1,
@@ -16,13 +16,13 @@ DEFAULT_MATCH = {
     "winner": 0,
     "score": {
         "player1": {
-            "sets": [0, 0, 0],
+            "sets": [0, 0, 0, 0, 0],  # Maksymalnie 5 setów
             "games": 0,
             "points": "0",
             "tiebreak_points": 0
         },
         "player2": {
-            "sets": [0, 0, 0],
+            "sets": [0, 0, 0, 0, 0],  # Maksymalnie 5 setów
             "games": 0,
             "points": "0",
             "tiebreak_points": 0

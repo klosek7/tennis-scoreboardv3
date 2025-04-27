@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Flask
+instance/
+.webassets-cache
+
+# Środowisko wirtualne
+venv/
+ENV/
+env/
+
+# Baza danych
+*.db
+*.sqlite
+*.sqlite3
+
+# Pliki konfiguracyjne
+.env
+.env.local
+
+# Logi
+*.log
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
+
+# Edytory i IDE
+.idea/
+.vscode/
+*.swp
+*.swo

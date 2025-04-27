@@ -1,0 +1,985 @@
+/**
+ * Mobile-first Tennis Control Panel CSS
+ */
+
+ :root {
+    /* Podstawowa paleta kolorów */
+    --primary-color: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #3b82f6;
+    --secondary-color: #475569;
+    --accent-color: #f59e0b;
+    --danger-color: #dc2626;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    
+    /* Kolory tekstu */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-light: #f8fafc;
+    
+    /* Kolory tła */
+    --bg-primary: #f1f5f9;
+    --bg-secondary: #ffffff;
+    --bg-dark: #0f172a;
+    
+    /* Kolory zawodników */
+    --player1-color: #3b82f6;
+    --player2-color: #ef4444;
+    
+    /* Parametry układu */
+    --header-height: 60px;
+    --tab-height: 56px;
+    --border-radius: 12px;
+    --control-height: 44px;
+    
+    /* Cienie */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Animacje */
+    --transition-quick: 150ms ease;
+    --transition-normal: 300ms ease;
+    
+    /* Odstępy */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+  }
+  
+  /* Ciemny motyw kolorów */
+  body.dark-theme {
+    --primary-color: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #60a5fa;
+    --secondary-color: #6b7280;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --bg-primary: #1e293b;
+    --bg-secondary: #0f172a;
+  }
+  
+  /* Reset i podstawowe style */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color var(--transition-normal);
+  }
+  
+  /* Kontener aplikacji */
+  .app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-2);
+    padding-bottom: calc(var(--tab-height) + var(--space-8));
+    position: relative;
+    min-height: 100vh;
+  }
+  
+  /* Nagłówek aplikacji */
+  .app-header {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  
+  .app-header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  /* Przełącznik motywu */
+  .theme-toggle {
+    position: relative;
+  }
+  
+  .toggle-checkbox {
+    display: none;
+  }
+  
+  .toggle-label {
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+    background-color: var(--secondary-color);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color var(--transition-normal);
+  }
+  
+  .toggle-label:before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    background-color: var(--bg-secondary);
+    transition: transform var(--transition-normal);
+  }
+  
+  .toggle-checkbox:checked + .toggle-label {
+    background-color: var(--primary-color);
+  }
+  
+  .toggle-checkbox:checked + .toggle-label:before {
+    transform: translateX(24px);
+  }
+  
+  .toggle-label i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+  }
+  
+  .toggle-label .fa-moon {
+    right: 8px;
+    color: var(--bg-secondary);
+  }
+  
+  .toggle-label .fa-sun {
+    left: 8px;
+    color: var(--accent-color);
+  }
+  /* Nawigacja (zakładki) */
+.tab-navigation {
+    display: flex;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--space-4);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    position: fixed;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    right: var(--space-4);
+    z-index: 100;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .tab-button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) 0;
+    background-color: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+  }
+  
+  .tab-button i {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-1);
+  }
+  
+  .tab-button span {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .tab-button.active {
+    color: var(--primary-color);
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  /* Zawartość zakładek */
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease forwards;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Karta statusu meczu */
+  .match-status-card {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .match-info {
+    text-align: center;
+    margin-bottom: var(--space-3);
+  }
+  
+  .player-names {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: var(--space-2);
+  }
+  
+  .match-status {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding: var(--space-1) var(--space-3);
+    background-color: rgba(59, 130, 246, 0.1);
+    border-radius: 16px;
+    display: inline-block;
+  }
+  
+  .time-display {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .time-box {
+    text-align: center;
+  }
+  
+  .time-box label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: var(--space-1);
+  }
+  
+  .time-box div {
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  /* Punktacja */
+  .scoreboard-control {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .player-row {
+    padding: var(--space-4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: background-color var(--transition-normal);
+  }
+  
+  .player-row:last-child {
+    border-bottom: none;
+  }
+  
+  #player1-row {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  #player2-row {
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+  
+  .player-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+  
+  .serving-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: var(--space-2);
+    background-color: var(--accent-color);
+    animation: pulse 1.5s infinite;
+    display: none;
+  }
+  
+  .serving-indicator.active {
+    display: block;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  .player-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    flex-grow: 1;
+  }
+  
+  .winner-badge {
+    font-size: 0.7rem;
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--accent-color);
+    color: var(--bg-secondary);
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+  }
+  
+  .winner-badge.active {
+    display: block;
+  }
+  .score-display {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+  
+  .sets-display {
+    display: flex;
+    margin-right: var(--space-4);
+  }
+  
+  .set-box {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    margin-right: var(--space-2);
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .games-display {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin-right: var(--space-4);
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .points-display {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  
+  .player-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+  
+  .control-button {
+    flex: 1;
+    height: var(--control-height);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .control-button i {
+    margin-right: var(--space-2);
+  }
+  
+  .add-point {
+    background-color: var(--primary-light);
+    color: white;
+  }
+  
+  .add-point:hover, .add-point:focus {
+    background-color: var(--primary-color);
+  }
+  
+  .remove-point {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .remove-point:hover, .remove-point:focus {
+    background-color: var(--text-secondary);
+  }
+  
+  /* Przyciski akcji meczu */
+  .match-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  
+  .action-button {
+    height: var(--control-height);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .action-button i {
+    margin-right: var(--space-2);
+  }
+  
+  .action-button.primary {
+    background-color: var(--primary-color);
+    color: white;
+    grid-column: span 2;
+  }
+  
+  .action-button.primary:hover, .action-button.primary:focus {
+    background-color: var(--primary-dark);
+  }
+  
+  .action-button.secondary {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .action-button.secondary:hover, .action-button.secondary:focus {
+    background-color: var(--text-secondary);
+  }
+  
+  .action-button.danger {
+    background-color: var(--danger-color);
+    color: white;
+  }
+  
+  .action-button.danger:hover, .action-button.danger:focus {
+    background-color: #b91c1c;
+  }
+  
+  /* Floating Action Button */
+  .fab-container {
+    position: fixed;
+    bottom: calc(var(--tab-height) + var(--space-8));
+    right: var(--space-4);
+    z-index: 50;
+  }
+  
+  .fab-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--transition-normal);
+    z-index: 52;
+    position: relative;
+  }
+  
+  .fab-button:hover, .fab-button:focus {
+    background-color: var(--primary-dark);
+  }
+  
+  .fab-options {
+    position: absolute;
+    bottom: 60px;
+    right: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+    transform: translateY(10px);
+    z-index: 51;
+  }
+  .fab-container.active .fab-options {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  
+  .fab-option {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--bg-secondary);
+    color: var(--primary-color);
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--transition-normal), transform var(--transition-quick);
+  }
+  
+  .fab-option:hover, .fab-option:focus {
+    background-color: rgba(59, 130, 246, 0.1);
+    transform: scale(1.1);
+  }
+  
+  /* Formularze i elementy formularzy */
+  .settings-section {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .settings-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+  }
+  
+  .form-group {
+    margin-bottom: var(--space-4);
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+    color: var(--text-primary);
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    height: var(--control-height);
+    padding: 0 var(--space-3);
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+  
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Przełączniki */
+  .switch-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--secondary-color);
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: var(--primary-color);
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+  
+  .help-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: var(--space-1);
+  }
+  
+  /* Radio buttons */
+  .radio-group {
+    display: flex;
+    gap: var(--space-3);
+  }
+  
+  .radio-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .radio-button input[type="radio"] {
+    margin-right: var(--space-2);
+  }
+  
+  /* Pikery kolorów */
+  .color-pickers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+  
+  .color-picker {
+    text-align: center;
+  }
+  
+  .color-picker label {
+    font-size: 0.85rem;
+    margin-bottom: var(--space-1);
+  }
+  
+  input[type="color"] {
+    width: 100%;
+    height: 40px;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  /* Przyciski formularza */
+.primary-button, 
+.secondary-button {
+  width: 100%;
+  height: var(--control-height);
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+
+.primary-button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.primary-button:hover, 
+.primary-button:focus {
+  background-color: var(--primary-dark);
+}
+
+.secondary-button {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.secondary-button:hover, 
+.secondary-button:focus {
+  background-color: var(--text-secondary);
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+/* Lista meczów */
+.matches-list {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.match-card {
+  padding: var(--space-3);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  transition: background-color var(--transition-normal);
+}
+
+.match-card:last-child {
+  border-bottom: none;
+}
+
+.match-card:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+.match-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.match-title {
+  font-weight: 600;
+}
+
+.match-date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.match-result {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: var(--space-2);
+}
+
+.match-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.match-actions button {
+  flex: 1;
+  padding: var(--space-1) var(--space-3);
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.05);
+  transition: background-color var(--transition-normal);
+}
+
+.match-actions button:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.match-actions button.primary {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--primary-color);
+}
+
+.match-actions button.primary:hover {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+.loading-text, 
+.empty-message {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Historia meczu */
+.history-section {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.match-info-card {
+  padding: var(--space-3);
+  background-color: rgba(0,0,0,0.03);
+  border-radius: 8px;
+  margin-bottom: var(--space-4);
+}
+
+.history-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: var(--space-4);
+}
+
+.history-item {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-time {
+  width: 80px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.history-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+/* Responsywność dla większych ekranów */
+@media (min-width: 768px) {
+    :root {
+      --control-height: 48px;
+    }
+    
+    .app-container {
+      padding: var(--space-4);
+      padding-bottom: var(--space-4);
+    }
+    
+    .tab-navigation {
+      position: static;
+      margin-bottom: var(--space-6);
+    }
+    
+    .tab-button {
+      flex-direction: row;
+      justify-content: center;
+      padding: var(--space-3);
+    }
+    
+    .tab-button i {
+      margin-right: var(--space-2);
+      margin-bottom: 0;
+    }
+    
+    .tab-button span {
+      font-size: 0.9rem;
+    }
+    
+    .match-status-card {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .match-info {
+      margin-bottom: 0;
+      text-align: left;
+    }
+    
+    .player-row {
+      display: grid;
+      grid-template-columns: 2fr 3fr 3fr;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    
+    .player-info, .score-display {
+      margin-bottom: 0;
+    }
+    
+    .match-actions {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    
+    .action-button.primary {
+      grid-column: auto;
+    }
+    
+    .settings-section {
+      padding: var(--space-6);
+    }
+    
+    /* Skryjmy FAB na większych ekranach */
+    .fab-container {
+      display: none;
+    }
+    
+    /* Dwa formularze obok siebie */
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+  }
+  
+  /* Animacje */
+  @keyframes scoreChange {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  
+  .animate-point {
+    animation: scoreChange 0.5s ease;
+  }
+  
+  @keyframes gameChange {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+  }
+  
+  .animate-game {
+    animation: gameChange 0.5s ease;
+  }
+  
+  @keyframes setChange {
+    0% { background-color: rgba(245, 158, 11, 0.5); }
+    100% { background-color: rgba(0, 0, 0, 0.05); }
+  }
+  
+  .animate-set {
+    animation: setChange 1s ease;
+  }
+  
+  /* Stany przycisku wyłączonego */
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  

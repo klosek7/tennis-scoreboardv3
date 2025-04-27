@@ -3,72 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tennis Scoreboard</title>
+    <title>Tablica wyników tenisa</title>
+    <!-- Fonty i ikony -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Style CSS -->
-    <link rel="stylesheet" href="/static/css/scoreboard.css">
-    <!-- Dynamiczne style motywów -->
-    <style id="dynamic-theme">
-        /* Tu będą wstawiane style wybranego motywu */
-    </style>
+    <link rel="stylesheet" href="/static/css/table-scoreboard.css">
 </head>
 <body>
-    <div class="scoreboard">
-        <div class="header">
-            <div id="event-name">MECZ TENISA</div>
-            <div id="match-time">00:00</div>
-        </div>
-        
-        <div class="logo-container" id="tournament-logo">
-            <!-- Tu będzie wstawione logo, jeśli zostanie skonfigurowane -->
-        </div>
-        
-        <div class="match-info" id="match-status">Mecz do <span id="sets-to-win">2</span> wygranych setów</div>
-        
-        <div class="score-labels">
-            <div class="set-label set0-container">SET 1</div>
-            <div class="set-label set1-container">SET 2</div>
-            <div class="set-label set2-container">SET 3</div>
-            <div class="games-label">GEMY</div>
-            <div class="points-label">PUNKTY</div>
-        </div>
-        
-        <div class="player-row player1">
-            <div class="player-name" id="player1-name">
-                <span id="serving1" class="serving" style="display: none;"></span>
-                Zawodnik 1
-                <span id="winner1" class="winner-badge" style="display: none;">ZWYCIĘZCA</span>
-            </div>
-            <div class="score-section">
-                <div class="set set0-container" id="player1-set0">0</div>
-                <div class="set set1-container" id="player1-set1">0</div>
-                <div class="set set2-container" id="player1-set2">0</div>
-                <div class="games" id="player1-games">0</div>
-                <div class="points" id="player1-points">0</div>
+    <div class="scoreboard-container">
+        <!-- Tytuł i czas meczu -->
+        <div class="scoreboard-header">
+            <div class="event-title">MECZ TENISA</div>
+            <div class="match-time">
+                <i class="fas fa-clock"></i>
+                <span id="match-time">00:00</span>
             </div>
         </div>
         
-        <div class="player-row player2">
-            <div class="player-name" id="player2-name">
-                <span id="serving2" class="serving" style="display: none;"></span>
-                Zawodnik 2
-                <span id="winner2" class="winner-badge" style="display: none;">ZWYCIĘZCA</span>
-            </div>
-            <div class="score-section">
-                <div class="set set0-container" id="player2-set0">0</div>
-                <div class="set set1-container" id="player2-set1">0</div>
-                <div class="set set2-container" id="player2-set2">0</div>
-                <div class="games" id="player2-games">0</div>
-                <div class="points" id="player2-points">0</div>
-            </div>
+        <!-- Logo turnieju -->
+        <div class="tournament-logo" id="tournament-logo">
+            <!-- Logo zostanie wstawione przez JavaScript -->
         </div>
         
-        <div class="timestamp">
-            <span id="current-set-time">Set: 00:00</span> | 
-            <span id="last-update">Aktualizacja: 00:00:00</span>
+        <!-- Status meczu -->
+        <div class="match-status">
+            <span id="match-status">Mecz do 2 wygranych setów</span>
+        </div>
+        
+        <!-- Tabela wyników -->
+        <table class="score-table">
+            <!-- Nagłówki -->
+            <thead>
+                <tr>
+                    <th class="player-col">ZAWODNIK</th>
+                    <th class="set-col">SET 1</th>
+                    <th class="games-col">GEMY</th>
+                    <th class="points-col">PUNKTY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Zawodnik 1 -->
+                <tr class="player-row player1">
+                    <td class="player-cell">
+                        <div class="player-name-container">
+                            <div class="serving-indicator" id="serving1"></div>
+                            <div class="player-name" id="player1-name">Zawodnik 1</div>
+                            <div class="winner-badge" id="winner1-badge">ZWYCIĘZCA</div>
+                        </div>
+                    </td>
+                    <td class="set-cell" id="player1-set0">0</td>
+                    <td class="games-cell" id="player1-games">0</td>
+                    <td class="points-cell" id="player1-points">0</td>
+                </tr>
+                <!-- Zawodnik 2 -->
+                <tr class="player-row player2">
+                    <td class="player-cell">
+                        <div class="player-name-container">
+                            <div class="serving-indicator" id="serving2"></div>
+                            <div class="player-name" id="player2-name">Zawodnik 2</div>
+                            <div class="winner-badge" id="winner2-badge">ZWYCIĘZCA</div>
+                        </div>
+                    </td>
+                    <td class="set-cell" id="player2-set0">0</td>
+                    <td class="games-cell" id="player2-games">0</td>
+                    <td class="points-cell" id="player2-points">0</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Informacje o secie i czasie -->
+        <div class="scoreboard-footer">
+            <div class="set-info">
+                <i class="fas fa-stopwatch"></i>
+                <span id="current-set-time">Set: 00:00</span>
+            </div>
+            <div class="tiebreak-indicator" id="tiebreak-indicator">
+                <i class="fas fa-exchange-alt"></i> TIE BREAK
+            </div>
+            <div class="update-info">
+                <i class="fas fa-sync-alt"></i>
+                <span id="last-update">Aktualizacja: 00:00:00</span>
+            </div>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="/static/js/scoreboard.js"></script>
+    <script src="/static/js/table-scoreboard.js"></script>
 </body>
 </html>
