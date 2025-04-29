@@ -247,6 +247,8 @@ def register_routes(app):
         matches = get_all_matches()
         return jsonify(matches)
     
+   
+    
     # API - Statystyki meczu
     @app.route('/api/match/<match_id>/statistics', methods=['GET'])
     def get_match_statistics(match_id):
@@ -298,6 +300,7 @@ def register_routes(app):
         except Exception as e:
             print(f"Błąd podczas aktualizacji wyglądu: {e}")
             return jsonify({"error": str(e)}), 500
+        
     
     # API - Eksport danych meczu do CSV
     @app.route('/api/match/<match_id>/export/csv', methods=['GET'])

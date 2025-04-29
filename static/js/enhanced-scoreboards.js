@@ -799,8 +799,10 @@ function isSetVisible(setIndex, match) {
               document.documentElement.style.setProperty('--header-bg', headerBg);
               document.documentElement.style.setProperty('--footer-bg', headerBg);
             }
+
           }
         }
+        
         
         // Logo
         setLogo(appearance.logo_url);
@@ -950,15 +952,41 @@ function updateProTennisSets(match, containerId, playerNum) {
       const setBox = document.createElement('div');
       setBox.className = 'pro-tennis-set';
       
-      // Dodaj klasę dla aktualnego lub zakończonego seta
+      // Dodaj klasę dla aktualnego seta
       if (match.current_set === i + 1) {
         setBox.classList.add('current');
-      } else if (match.score.player1.sets[i] > 0 || match.score.player2.sets[i] > 0) {
-        setBox.classList.add('completed');
       }
       
-      setBox.textContent = match.score[`player${playerNum}`].sets[i];
+      // Pobieramy wyniki obu graczy dla tego seta
+      const p1Score = match.score.player1.sets[i];
+      const p2Score = match.score.player2.sets[i];
       
+      // Tworzenie spana z wynikiem, aby móc go kolorować
+      const scoreSpan = document.createElement('span');
+      scoreSpan.textContent = match.score[`player${playerNum}`].sets[i];
+      
+      // Sprawdzanie czy set został zakończony i dodanie odpowiedniej klasy do cyfry wyniku
+      if (p1Score > 0 || p2Score > 0) {
+        // Set jest zakończony - sprawdzamy kto wygrał
+        if (p1Score > p2Score) {
+          // Set wygrany przez zawodnika 1
+          if (playerNum === 1 && p1Score >= 6) {
+            // Tylko zwycięskie cyfry 6 lub 7 dla zawodnika 1
+            scoreSpan.className = 'score-p1-won';
+          }
+        } else if (p2Score > p1Score) {
+          // Set wygrany przez zawodnika 2
+          if (playerNum === 2 && p2Score >= 6) {
+            // Tylko zwycięskie cyfry 6 lub 7 dla zawodnika 2
+            scoreSpan.className = 'score-p2-won';
+          }
+        }
+      }
+      
+      // Dodanie spana z wynikiem do elementu seta
+      setBox.appendChild(scoreSpan);
+      
+      // Dodanie elementu seta do kontenera
       container.appendChild(setBox);
     }
   }

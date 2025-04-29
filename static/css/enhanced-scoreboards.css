@@ -845,21 +845,31 @@
 
 .pro-tennis-wrapper {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .pro-tennis-main {
   display: flex;
-  height: 80px;
-  background-color: rgba(0, 0, 0, 0.85);
-  border-radius: 3px;
+  height: var(--pro-tennis-scorecard-height, 80px);
+  background-color: var(--pro-tennis-bg-color, rgba(0, 0, 0, 0.85));
+  border-radius: var(--pro-tennis-border-radius, 3px);
   overflow: hidden;
+  border: 1px solid var(--pro-tennis-border-color, rgba(51, 51, 51, 0.2));
+  min-width: 350px; /* Zapewnia minimalną szerokość całego panelu */
+  position: relative; /* Dodane - zapewnia właściwy kontekst dla pozycjonowania absolutnego */
+  top: 25px; /* Dodane - kompensuje miejsce zajmowane przez wskaźnik seta */
+  margin-top: 0; /* Zapewnia brak dodatkowych marginesów */
 }
 
 /* Panel z nazwiskami zawodników */
 .pro-tennis-player-panel {
   display: flex;
   flex-direction: column;
-  width: 150px;
+  min-width: 150px; /* Minimalna szerokość */
+  max-width: 250px; /* Maksymalna szerokość */
+  width: auto; /* Automatyczne dopasowanie szerokości */
+  flex: 1; /* Pozwala na rozszerzanie */
 }
 
 .pro-tennis-player {
@@ -893,17 +903,24 @@
 }
 
 .pro-tennis-player-name {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: var(--pro-tennis-name-size, 20px);
+  font-weight: var(--pro-tennis-font-weight, 700);
   letter-spacing: 1px;
   text-transform: uppercase;
+  color: var(--pro-tennis-player-name-color, #ffffff);
+  white-space: nowrap; /* Zapobiega łamaniu tekstu */
+  overflow: hidden; /* Ukrywa nadmiarowy tekst */
+  text-overflow: ellipsis; /* Dodaje wielokropek dla przyciętego tekstu */
+  padding-right: 10px; /* Zapewnia miejsce na wielokropek */
 }
 
 /* Panel wyników setów */
 .pro-tennis-sets-panel {
   display: flex;
   flex-direction: column;
-  width: 180px;
+  width: auto; /* Automatyczna szerokość */
+  min-width: 40px; /* Minimalny rozmiar dla jednego seta */
+  flex-shrink: 0; /* Nie zmniejszaj przy braku miejsca */
 }
 
 .pro-tennis-sets-container {
@@ -925,7 +942,7 @@
 }
 
 .pro-tennis-set.current {
-  background-color: #b3d335;
+  background-color: #a5a79d;
   color: #000;
 }
 
@@ -968,15 +985,21 @@
   right: 0;
   display: flex;
   align-items: center;
+  height: 25px; /* Dodane - precyzyjnie określa wysokość kontenera */
 }
 
 .pro-tennis-set-indicator {
-  background-color: #b3d335;
+  background-color: var(--pro-tennis-indicator-color, #b3d335);
   color: #000;
   font-size: 16px;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 3px 3px 0 0;
+  line-height: 1; /* Dodane - zapewnia lepsze centrowanie tekstu */
+  height: 100%; /* Dodane - zajmuje całą wysokość kontenera */
+  display: flex; /* Dodane - umożliwia łatwiejsze centrowanie */
+  align-items: center; /* Dodane - centruje tekst w pionie */
+  justify-content: center; /* Dodane - centruje tekst w poziomie */
 }
 
 .pro-tennis-tiebreak {
@@ -987,11 +1010,15 @@
   padding: 4px 10px;
   border-radius: 3px 3px 0 0;
   margin-left: 5px;
-  display: none;
+  line-height: 1; /* Dodane - zapewnia lepsze centrowanie tekstu */
+  height: 100%; /* Dodane - zajmuje całą wysokość kontenera */
+  display: none; /* Zachowane - początkowo ukryte */
+  align-items: center; /* Dodane - będzie aktywne gdy element będzie widoczny */
+  justify-content: center; /* Dodane - będzie aktywne gdy element będzie widoczny */
 }
 
 .pro-tennis-tiebreak.active {
-  display: block;
+  display: flex; /* Zmienione z block na flex dla lepszego wyrównania */
 }
 
 /* Animacje dla zmian punktów */
@@ -1039,6 +1066,17 @@
   }
 }
 
+@media (max-width: 400px) {
+  .pro-tennis-player-panel {
+    min-width: 100px; /* Jeszcze mniejsza minimalna szerokość na małych ekranach */
+  }
+  
+  .pro-tennis-current-set-games,
+  .pro-tennis-current-game {
+    width: 35px; /* Jeszcze bardziej zmniejszona szerokość na małych ekranach */
+  }
+}
+
 /* Panel wyników setów - zmniejsz szerokość aby zmieścić gemy */
 .pro-tennis-sets-panel {
   display: flex;
@@ -1050,10 +1088,10 @@
 .pro-tennis-current-set-games {
   display: flex;
   flex-direction: column;
-  width: 50px;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  width: 40px; /* Zmniejszona z 50px */
+  flex-shrink: 0; /* Nie zmniejszaj przy braku miejsca */
+  border-left: 1px solid var(--pro-tennis-border-color, rgba(51, 51, 51, 0.2));
 }
-
 .pro-tennis-games {
   display: flex;
   align-items: center;
@@ -1079,8 +1117,9 @@
 .pro-tennis-current-game {
   display: flex;
   flex-direction: column;
-  width: 60px;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  width: 50px; /* Zmniejszona z 60px */
+  flex-shrink: 0; /* Nie zmniejszaj przy braku miejsca */
+  border-left: 1px solid var(--pro-tennis-border-color, rgba(51, 51, 51, 0.2));
 }
 
 /* Animacje dla zmian gemów */
@@ -1103,4 +1142,40 @@
   .pro-tennis-games-value {
       font-size: 18px;
   }
+}
+.pro-tennis-set.completed-p1-won {
+  background-color: #3b82f6; /* Niebieski dla setów wygranych przez zawodnika 1 */
+  color: white;
+}
+
+.pro-tennis-set.completed-p2-won {
+  background-color: #ef4444; /* Czerwony dla setów wygranych przez zawodnika 2 */
+  color: white;
+}
+
+/* Kolor dla aktualnie rozgrywanego seta pozostaje ten sam */
+.pro-tennis-set.current {
+  background-color: #a5a79d;
+  color: #000;
+}
+
+/* Kolor dla zakończonych remisowych setów (choć w tenisie to raczej rzadkość) */
+.pro-tennis-set.completed-draw {
+  background-color: #9ca3af; /* Szary dla remisów */
+  color: white;
+}
+.pro-tennis-set .score-p1-won {
+  color: #f7f303; /* Niebieski dla cyfr setów wygranych przez zawodnika 1 */
+  font-weight: 700; /* Pogrubienie dla lepszej widoczności */
+}
+
+.pro-tennis-set .score-p2-won {
+  color: #f7f303; /* Czerwony dla cyfr setów wygranych przez zawodnika 2 */
+  font-weight: 700; /* Pogrubienie dla lepszej widoczności */
+}
+
+/* Kolor dla aktualnie rozgrywanego seta pozostaje ten sam */
+.pro-tennis-set.current {
+  background-color: #a5a79d;
+  color: #000;
 }
