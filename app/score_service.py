@@ -287,9 +287,19 @@ def check_match_winner(match):
     """
     sets_to_win = match["sets_to_win"]
     
-    # Liczenie wygranych setów
-    p1_sets_won = sum(1 for s in match["score"]["player1"]["sets"] if s > 0)
-    p2_sets_won = sum(1 for s in match["score"]["player2"]["sets"] if s > 0)
+    # POPRAWIONE: Prawidłowe liczenie wygranych setów
+    p1_sets_won = 0
+    p2_sets_won = 0
+    
+    # Porównujemy wyniki w każdym secie, aby określić kto wygrał dany set
+    for i in range(len(match["score"]["player1"]["sets"])):
+        p1_games = match["score"]["player1"]["sets"][i]
+        p2_games = match["score"]["player2"]["sets"][i]
+        
+        if p1_games > p2_games and p1_games > 0:
+            p1_sets_won += 1
+        elif p2_games > p1_games and p2_games > 0:
+            p2_sets_won += 1
     
     winner = 0
     if p1_sets_won >= sets_to_win:
@@ -299,7 +309,7 @@ def check_match_winner(match):
     
     if winner > 0:
         match["winner"] = winner
-        # Naprawiony błąd - dodanie informacji o zakończeniu meczu
+        # Zakończenie meczu
         end_match(match)
     
     return match["winner"]
@@ -605,31 +615,40 @@ def reset_match(match):
     return match
 
 def determine_winner(match):
-    """Określenie zwycięzcy na podstawie aktualnego wyniku"""
+    """
+    Określenie zwycięzcy na podstawie aktualnego wyniku
+    
+    Args:
+        match: Słownik meczu
+        
+    Returns:
+        int: Numer zwycięzcy (0 jeśli brak jednoznacznego zwycięzcy)
+    """
     sets_to_win = match["sets_to_win"]
     
-    # Liczenie wygranych setów
-    p1_sets_won = sum(1 for s in match["score"]["player1"]["sets"] if s > 0)
-    p2_sets_won = sum(1 for s in match["score"]["player2"]["sets"] if s > 0)
+    # POPRAWIONE: Prawidłowe liczenie wygranych setów
+    p1_sets_won = 0
+    p2_sets_won = 0
     
-    if p1_sets_won > p2_sets_won:
-        match["winner"] = 1
-    elif p2_sets_won > p1_sets_won:
-        match["winner"] = 2
-    else:
-        # Remis - decyduje większa liczba wygranych gemów
-        p1_total_games = sum(match["score"]["player1"]["sets"])
-        p2_total_games = sum(match["score"]["player2"]["sets"])
+    # Porównujemy wyniki w każdym secie, aby określić kto wygrał dany set
+    for i in range(len(match["score"]["player1"]["sets"])):
+        p1_games = match["score"]["player1"]["sets"][i]
+        p2_games = match["score"]["player2"]["sets"][i]
         
-        if p1_total_games > p2_total_games:
-            match["winner"] = 1
-        elif p2_total_games > p1_total_games:
-            match["winner"] = 2
-        else:
-            # Całkowity remis - brak jednoznacznego zwycięzcy
-            match["winner"] = 0
+        if p1_games > p2_games and p1_games > 0:
+            p1_sets_won += 1
+        elif p2_games > p1_games and p2_games > 0:
+            p2_sets_won += 1
     
-    return match["winner"]
+    if p1_sets_won >= sets_to_win:
+        winner = 1
+    elif p2_sets_won >= sets_to_win:
+        winner = 2
+    else:
+        # Brak zwycięzcy, ponieważ żaden zawodnik nie osiągnął wymaganej liczby wygranych setów
+        winner = 0
+    
+    return winner
 
 def update_match_duration(match, current_time):
     """Aktualizacja całkowitego czasu trwania meczu"""

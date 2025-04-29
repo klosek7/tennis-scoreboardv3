@@ -983,3 +983,55 @@
     cursor: not-allowed;
   }
   
+  .sets-display {
+    display: flex;
+    flex-wrap: wrap; /* Umożliwia zawijanie setów na mniejszych ekranach */
+    align-items: center;
+    margin-right: var(--space-4);
+  }
+  
+  .set-box {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    margin-right: var(--space-2);
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  /* Dostosowanie rozmiarów dla małych ekranów */
+  @media (max-width: 480px) {
+    .sets-display {
+      margin-bottom: var(--space-2);
+    }
+    
+    .set-box {
+      width: 25px;
+      height: 25px;
+      font-size: 0.8rem;
+      margin-right: var(--space-1);
+    }
+    
+    .score-display {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .games-display, .points-display {
+      margin-top: var(--space-2);
+    }
+  }
+  
+  /* Animacja dla zmiany wyniku setu */
+  @keyframes setChange {
+    0% { background-color: rgba(245, 158, 11, 0.5); }
+    100% { background-color: rgba(0, 0, 0, 0.05); }
+  }
+  
+  .animate-set {
+    animation: setChange 1s ease;
+  }

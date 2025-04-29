@@ -320,77 +320,63 @@ function applyAppearance(appearance) {
     }
 
 /**
- * Funkcja sprawdzająca, czy set jest potrzebny (aktualny lub już rozegrany)
+ * Funkcja sprawdzająca, czy dany set powinien być wyświetlany
+ * Warunek: set jest aktualnie rozgrywany LUB został już rozegrany
  */
 function isSetNeeded(setIndex, match) {
-  return match.current_set > setIndex || 
-         match.score.player1.sets[setIndex] > 0 || 
-         match.score.player2.sets[setIndex] > 0 ||
-         // Dodatkowo sprawdzamy, czy poprzedni set istnieje (dla zestawów > 3)
-         (setIndex > 0 && isSetNeeded(setIndex - 1, match));
+  // Set jest aktualnie rozgrywany
+  const isCurrentSet = match.current_set === setIndex + 1;
+  
+  // Set został już rozegrany - przynajmniej jeden z graczy ma punkty większe od 0
+  const isSetCompleted = match.score.player1.sets[setIndex] > 0 || match.score.player2.sets[setIndex] > 0;
+  
+  return isCurrentSet || isSetCompleted;
 }
 
-    /**
-     * Upewnienie się, że kolumna seta istnieje
-     */
-    function ensureSetColumn(setIndex, match) {
-      // Pierwszy set zawsze istnieje, sprawdzamy tylko dla seta 2+ (indeksy 1-4)
-      if (setIndex === 0) return;
-      
-      const headerRow = document.querySelector('.score-table thead tr');
-      const player1Row = document.querySelector('.player-row.player1');
-      const player2Row = document.querySelector('.player-row.player2');
-      
-      // Sprawdzamy, czy kolumna już istnieje
-      const setHeaderExists = document.querySelector(`.set-col-${setIndex}`);
-      if (setHeaderExists) return;
-      
-      // Określamy maksymalną liczbę setów
-      const maxSets = match.sets_to_win === 3 ? 5 : 3;
-      
-      // Sprawdzamy czy set jest potrzebny
-      // W meczu do 2 wygranych setów (max 3 sety), pokazujemy set gdy jest aktualny lub gdy ma wyniki
-      // W meczu do 3 wygranych setów (max 5 setów), pokazujemy dodatkowo sety sekwencyjnie
-      const isNeeded = 
-        match.current_set > setIndex || 
-        match.score.player1.sets[setIndex] > 0 || 
-        match.score.player2.sets[setIndex] > 0 ||
-        // Sprawdzamy czy poprzedni set ma punkty lub jest aktualny (dla setów 2+)
-        (setIndex > 0 && (
-          match.score.player1.sets[setIndex-1] > 0 || 
-          match.score.player2.sets[setIndex-1] > 0 ||
-          match.current_set > setIndex-1
-        ));
-      
-      // Dodatkowo sprawdzamy czy liczba setów do wygrania pozwala na ten set
-      const setsToWin = match.sets_to_win || 2;
-      const isWithinLimit = (setsToWin === 3 && setIndex < 5) || (setsToWin === 2 && setIndex < 3);
-      
-      if (isNeeded && isWithinLimit) {
-        // Dodajemy nagłówek kolumny
-        const gamesTh = document.querySelector('.games-col');
-        const setTh = document.createElement('th');
-        setTh.className = `set-col set-col-${setIndex}`;
-        setTh.textContent = `SET ${setIndex + 1}`;
-        headerRow.insertBefore(setTh, gamesTh);
-        
-        // Dodajemy komórkę dla pierwszego zawodnika
-        const p1GamesCell = player1Row.querySelector('.games-cell');
-        const p1SetCell = document.createElement('td');
-        p1SetCell.className = 'set-cell';
-        p1SetCell.id = `player1-set${setIndex}`;
-        p1SetCell.textContent = '0';
-        player1Row.insertBefore(p1SetCell, p1GamesCell);
-        
-        // Dodajemy komórkę dla drugiego zawodnika
-        const p2GamesCell = player2Row.querySelector('.games-cell');
-        const p2SetCell = document.createElement('td');
-        p2SetCell.className = 'set-cell';
-        p2SetCell.id = `player2-set${setIndex}`;
-        p2SetCell.textContent = '0';
-        player2Row.insertBefore(p2SetCell, p2GamesCell);
-      }
-    }
+ /**
+ * Upewnienie się, że kolumna seta istnieje
+ */
+function ensureSetColumn(setIndex, match) {
+  // Pierwszy set zawsze istnieje, sprawdzamy tylko dla seta 2+ (indeksy 1-4)
+  if (setIndex === 0) return;
+  
+  const headerRow = document.querySelector('.score-table thead tr');
+  const player1Row = document.querySelector('.player-row.player1');
+  const player2Row = document.querySelector('.player-row.player2');
+  
+  // Sprawdzamy, czy kolumna już istnieje
+  const setHeaderExists = document.querySelector(`.set-col-${setIndex}`);
+  if (setHeaderExists) return;
+  
+  // Sprawdzamy czy set jest potrzebny zgodnie z nowymi regułami
+  const isNeeded = isSetNeeded(setIndex, match);
+  
+  // Dodajemy kolumnę tylko jeśli set jest potrzebny
+  if (isNeeded) {
+    // Dodajemy nagłówek kolumny
+    const gamesTh = document.querySelector('.games-col');
+    const setTh = document.createElement('th');
+    setTh.className = `set-col set-col-${setIndex}`;
+    setTh.textContent = `SET ${setIndex + 1}`;
+    headerRow.insertBefore(setTh, gamesTh);
+    
+    // Dodajemy komórkę dla pierwszego zawodnika
+    const p1GamesCell = player1Row.querySelector('.games-cell');
+    const p1SetCell = document.createElement('td');
+    p1SetCell.className = 'set-cell';
+    p1SetCell.id = `player1-set${setIndex}`;
+    p1SetCell.textContent = '0';
+    player1Row.insertBefore(p1SetCell, p1GamesCell);
+    
+    // Dodajemy komórkę dla drugiego zawodnika
+    const p2GamesCell = player2Row.querySelector('.games-cell');
+    const p2SetCell = document.createElement('td');
+    p2SetCell.className = 'set-cell';
+    p2SetCell.id = `player2-set${setIndex}`;
+    p2SetCell.textContent = '0';
+    player2Row.insertBefore(p2SetCell, p2GamesCell);
+  }
+}
     
     /**
      * Aktualizacja elementu z animacją
@@ -419,9 +405,44 @@ function isSetNeeded(setIndex, match) {
     /**
      * Aktualizacja widoczności setów
      */
-    function updateSetsVisibility(match) {
-      // Ta funkcja jest obsługiwana przez ensureSetColumn
+/**
+ * Aktualizacja widoczności setów
+ */
+function updateSetsVisibility(match) {
+  // Określamy maksymalną liczbę setów
+  const maxSets = match.sets_to_win === 3 ? 5 : 3;
+  
+  // Dla każdego seta sprawdzamy czy powinien być widoczny
+  for (let i = 0; i < maxSets; i++) {
+    // Sprawdzenie dla każdego seta (poza pierwszym)
+    if (i > 0) {
+      // Pobieramy elementy kolumny dla tego seta
+      const setHeader = document.querySelector(`.set-col-${i}`);
+      const p1SetCell = document.getElementById(`player1-set${i}`);
+      const p2SetCell = document.getElementById(`player2-set${i}`);
+      
+      // Sprawdzamy czy set powinien być widoczny
+      const isNeeded = isSetNeeded(i, match);
+      
+      // Jeśli elementy istnieją, aktualizujemy ich widoczność
+      if (setHeader && p1SetCell && p2SetCell) {
+        if (isNeeded) {
+          setHeader.style.display = '';
+          p1SetCell.style.display = '';
+          p2SetCell.style.display = '';
+        } else {
+          setHeader.style.display = 'none';
+          p1SetCell.style.display = 'none';
+          p2SetCell.style.display = 'none';
+        }
+      }
+      // Jeśli elementy nie istnieją, a są potrzebne, tworzymy je
+      else if (isNeeded) {
+        ensureSetColumn(i, match);
+      }
     }
+  }
+}
     
     /**
      * Aktualizacja statusu meczu

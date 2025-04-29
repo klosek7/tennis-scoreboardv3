@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozszerzone tablice wyników tenisa</title>
+    <!-- Fonty i ikony -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="/static/css/enhanced-scoreboards.css">
+</head>
+<body>
+    <!-- Oryginalny szablon -->
+    <div id="original-template" class="scoreboard-container template">
+        <!-- Tytuł i czas meczu -->
+        <div class="scoreboard-header">
+            <div class="event-title">MECZ TENISA</div>
+            <div class="match-time">
+                <i class="fas fa-clock"></i>
+                <span id="original-match-time">00:00</span>
+            </div>
+        </div>
+        
+        <!-- Logo turnieju -->
+        <div class="tournament-logo" id="original-tournament-logo">
+            <!-- Logo zostanie wstawione przez JavaScript -->
+        </div>
+        
+        <!-- Status meczu -->
+        <div class="match-status">
+            <span id="original-match-status">Mecz do 2 wygranych setów</span>
+        </div>
+        
+        <!-- Tabela wyników -->
+        <table class="score-table">
+            <!-- Nagłówki -->
+            <thead>
+                <tr>
+                    <th class="player-col">ZAWODNIK</th>
+                    <th class="set-col">SET 1</th>
+                    <th class="games-col">GEMY</th>
+                    <th class="points-col">PUNKTY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Zawodnik 1 -->
+                <tr class="player-row player1">
+                    <td class="player-cell">
+                        <div class="player-name-container">
+                            <div class="serving-indicator" id="original-serving1"></div>
+                            <div class="player-name" id="original-player1-name">Zawodnik 1</div>
+                            <div class="winner-badge" id="original-winner1-badge">ZWYCIĘZCA</div>
+                        </div>
+                    </td>
+                    <td class="set-cell" id="original-player1-set0">0</td>
+                    <td class="games-cell" id="original-player1-games">0</td>
+                    <td class="points-cell" id="original-player1-points">0</td>
+                </tr>
+                <!-- Zawodnik 2 -->
+                <tr class="player-row player2">
+                    <td class="player-cell">
+                        <div class="player-name-container">
+                            <div class="serving-indicator" id="original-serving2"></div>
+                            <div class="player-name" id="original-player2-name">Zawodnik 2</div>
+                            <div class="winner-badge" id="original-winner2-badge">ZWYCIĘZCA</div>
+                        </div>
+                    </td>
+                    <td class="set-cell" id="original-player2-set0">0</td>
+                    <td class="games-cell" id="original-player2-games">0</td>
+                    <td class="points-cell" id="original-player2-points">0</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Informacje o secie i czasie -->
+        <div class="scoreboard-footer">
+            <div class="set-info">
+                <i class="fas fa-stopwatch"></i>
+                <span id="original-current-set-time">Set: 00:00</span>
+            </div>
+            <div class="tiebreak-indicator" id="original-tiebreak-indicator">
+                <i class="fas fa-exchange-alt"></i> TIE BREAK
+            </div>
+            <div class="update-info">
+                <i class="fas fa-sync-alt"></i>
+                <span id="original-last-update">Aktualizacja: 00:00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Szablon horyzontalny (na górze ekranu) -->
+    <div id="horizontal-template" class="scoreboard-container template horizontal-board">
+        <div class="horizontal-content">
+            <div class="logo-section">
+                <div class="tournament-logo" id="horizontal-tournament-logo"></div>
+            </div>
+            
+            <div class="players-section">
+                <div class="player-block player1">
+                    <div class="player-info">
+                        <div class="serving-indicator" id="horizontal-serving1"></div>
+                        <div class="player-name" id="horizontal-player1-name">Zawodnik 1</div>
+                        <div class="winner-badge" id="horizontal-winner1-badge">ZWYCIĘZCA</div>
+                    </div>
+                    <div class="horizontal-score">
+                        <div class="sets-display" id="horizontal-player1-sets">
+                            <div class="set-box" id="horizontal-player1-set0">0</div>
+                        </div>
+                        <div class="games" id="horizontal-player1-games">0</div>
+                        <div class="points" id="horizontal-player1-points">0</div>
+                    </div>
+                </div>
+                
+                <div class="divider">vs</div>
+                
+                <div class="player-block player2">
+                    <div class="player-info">
+                        <div class="serving-indicator" id="horizontal-serving2"></div>
+                        <div class="player-name" id="horizontal-player2-name">Zawodnik 2</div>
+                        <div class="winner-badge" id="horizontal-winner2-badge">ZWYCIĘZCA</div>
+                    </div>
+                    <div class="horizontal-score">
+                        <div class="sets-display" id="horizontal-player2-sets">
+                            <div class="set-box" id="horizontal-player2-set0">0</div>
+                        </div>
+                        <div class="games" id="horizontal-player2-games">0</div>
+                        <div class="points" id="horizontal-player2-points">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="set-info">
+                    <span id="horizontal-match-status">Mecz do 2 wygranych setów</span>
+                </div>
+                <div class="time-info">
+                    <i class="fas fa-clock"></i>
+                    <span id="horizontal-match-time">00:00</span>
+                </div>
+                <div class="tiebreak-indicator" id="horizontal-tiebreak-indicator">
+                    <i class="fas fa-exchange-alt"></i> TIE BREAK
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Szablon wertykalny (z boku ekranu) -->
+    <div id="vertical-template" class="scoreboard-container template vertical-board">
+        <div class="vertical-header">
+            <div class="tournament-logo" id="vertical-tournament-logo"></div>
+            <div class="match-status" id="vertical-match-status">Mecz do 2 wygranych setów</div>
+        </div>
+        
+        <div class="vertical-players">
+            <div class="vertical-player player1">
+                <div class="vertical-player-header">
+                    <div class="serving-indicator" id="vertical-serving1"></div>
+                    <div class="player-name" id="vertical-player1-name">Zawodnik 1</div>
+                    <div class="winner-badge" id="vertical-winner1-badge">ZWYCIĘZCA</div>
+                </div>
+                <div class="vertical-score">
+                    <div class="vertical-sets" id="vertical-player1-sets">
+                        <div class="set-box" id="vertical-player1-set0">0</div>
+                    </div>
+                    <div class="vertical-games">
+                        <span class="label">Gemy</span>
+                        <span class="value" id="vertical-player1-games">0</span>
+                    </div>
+                    <div class="vertical-points">
+                        <span class="label">Punkty</span>
+                        <span class="value" id="vertical-player1-points">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="vertical-player player2">
+                <div class="vertical-player-header">
+                    <div class="serving-indicator" id="vertical-serving2"></div>
+                    <div class="player-name" id="vertical-player2-name">Zawodnik 2</div>
+                    <div class="winner-badge" id="vertical-winner2-badge">ZWYCIĘZCA</div>
+                </div>
+                <div class="vertical-score">
+                    <div class="vertical-sets" id="vertical-player2-sets">
+                        <div class="set-box" id="vertical-player2-set0">0</div>
+                    </div>
+                    <div class="vertical-games">
+                        <span class="label">Gemy</span>
+                        <span class="value" id="vertical-player2-games">0</span>
+                    </div>
+                    <div class="vertical-points">
+                        <span class="label">Punkty</span>
+                        <span class="value" id="vertical-player2-points">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="vertical-footer">
+            <div class="time-info">
+                <i class="fas fa-clock"></i> <span id="vertical-match-time">00:00</span>
+            </div>
+            <div class="tiebreak-indicator" id="vertical-tiebreak-indicator">
+                <i class="fas fa-exchange-alt"></i> TIE BREAK
+            </div>
+            <div class="update-info">
+                <span id="vertical-current-set-time">Set: 00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Szablon nowoczesny duży -->
+    <div id="modern-template" class="scoreboard-container template modern-board">
+        <div class="modern-header">
+            <div class="tournament-info">
+                <div class="tournament-logo" id="modern-tournament-logo"></div>
+                <div class="event-title">MECZ TENISA</div>
+            </div>
+            <div class="modern-match-status" id="modern-match-status">
+                <span class="status-text">Mecz do 2 wygranych setów</span>
+                <div class="tiebreak-label" id="modern-tiebreak-indicator">TIE BREAK</div>
+            </div>
+            <div class="match-time">
+                <i class="fas fa-clock"></i>
+                <span id="modern-match-time">00:00</span>
+            </div>
+        </div>
+        
+        <div class="modern-players">
+            <div class="modern-player player1">
+                <div class="modern-player-info">
+                    <div class="serving-indicator" id="modern-serving1"></div>
+                    <div class="modern-player-name" id="modern-player1-name">Zawodnik 1</div>
+                    <div class="winner-badge" id="modern-winner1-badge">ZWYCIĘZCA</div>
+                </div>
+                <div class="modern-player-score">
+                    <div class="modern-sets" id="modern-player1-sets">
+                        <div class="modern-set-box" id="modern-player1-set0">0</div>
+                    </div>
+                    <div class="modern-games-points">
+                        <div class="modern-games" id="modern-player1-games">0</div>
+                        <div class="modern-points" id="modern-player1-points">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modern-player player2">
+                <div class="modern-player-info">
+                    <div class="serving-indicator" id="modern-serving2"></div>
+                    <div class="modern-player-name" id="modern-player2-name">Zawodnik 2</div>
+                    <div class="winner-badge" id="modern-winner2-badge">ZWYCIĘZCA</div>
+                </div>
+                <div class="modern-player-score">
+                    <div class="modern-sets" id="modern-player2-sets">
+                        <div class="modern-set-box" id="modern-player2-set0">0</div>
+                    </div>
+                    <div class="modern-games-points">
+                        <div class="modern-games" id="modern-player2-games">0</div>
+                        <div class="modern-points" id="modern-player2-points">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modern-footer">
+            <div class="set-time" id="modern-current-set-time">Set: 00:00</div>
+            <div class="modern-update-time" id="modern-last-update">Aktualizacja: 00:00:00</div>
+        </div>
+    </div>
+
+    <!-- Szablon telewizyjny -->
+    <div id="broadcast-template" class="scoreboard-container template broadcast-board">
+        <div class="broadcast-header">
+            <div class="broadcast-title-section">
+                <div class="broadcast-logo" id="broadcast-tournament-logo"></div>
+                <div class="broadcast-title">MECZ TENISOWY</div>
+            </div>
+            
+            <div class="broadcast-status-section">
+                <div class="broadcast-match-status" id="broadcast-match-status">Mecz do 2 wygranych setów</div>
+                <div class="broadcast-tiebreak" id="broadcast-tiebreak-indicator">TIE BREAK</div>
+            </div>
+            
+            <div class="broadcast-time-section">
+                <div class="broadcast-match-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="broadcast-match-time">00:00</span>
+                </div>
+                <div class="broadcast-set-time" id="broadcast-current-set-time">Set: 00:00</div>
+            </div>
+        </div>
+        
+        <div class="broadcast-score-container">
+            <div class="broadcast-player-1">
+                <div class="broadcast-player-info">
+                    <div class="broadcast-serving" id="broadcast-serving1"></div>
+                    <div class="broadcast-player-name" id="broadcast-player1-name">Zawodnik 1</div>
+                    <div class="broadcast-winner" id="broadcast-winner1-badge">ZWYCIĘZCA</div>
+                </div>
+                <div class="broadcast-score-panel">
+                    <div class="broadcast-sets" id="broadcast-player1-sets"></div>
+                    <div class="broadcast-games" id="broadcast-player1-games">0</div>
+                    <div class="broadcast-points" id="broadcast-player1-points">0</div>
+                </div>
+            </div>
+            
+            <div class="broadcast-player-2">
+                <div class="broadcast-player-info">
+                    <div class="broadcast-serving" id="broadcast-serving2"></div>
+                    <div class="broadcast-player-name" id="broadcast-player2-name">Zawodnik 2</div>
+                    <div class="broadcast-winner" id="broadcast-winner2-badge">ZWYCIĘZCA</div>
+                </div>
+                <div class="broadcast-score-panel">
+                    <div class="broadcast-sets" id="broadcast-player2-sets"></div>
+                    <div class="broadcast-games" id="broadcast-player2-games">0</div>
+                    <div class="broadcast-points" id="broadcast-player2-points">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Pro Tennis Scoreboard - wzorowany na profesjonalnych transmisjach telewizyjnych -->
+        <div id="pro-tennis-template" class="scoreboard-container template pro-tennis-board">
+            <div class="pro-tennis-wrapper">
+                <!-- Główny kontener scoreboarda -->
+                <div class="pro-tennis-main">
+                    <!-- Lewy panel z nazwiskami zawodników -->
+                    <div class="pro-tennis-player-panel">
+                        <div class="pro-tennis-player player1">
+                            <div class="pro-tennis-serving" id="pro-tennis-serving1"></div>
+                            <div class="pro-tennis-player-name" id="pro-tennis-player1-name">BUBLIK</div>
+                        </div>
+                        <div class="pro-tennis-player player2">
+                            <div class="pro-tennis-serving" id="pro-tennis-serving2"></div>
+                            <div class="pro-tennis-player-name" id="pro-tennis-player2-name">RUBLEV</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Panel wyników setów -->
+                    <div class="pro-tennis-sets-panel">
+                        <div class="pro-tennis-sets-container" id="pro-tennis-player1-sets">
+                            <!-- Sety zawodnika 1 będą tutaj dodane dynamicznie -->
+                        </div>
+                        <div class="pro-tennis-sets-container" id="pro-tennis-player2-sets">
+                            <!-- Sety zawodnika 2 będą tutaj dodane dynamicznie -->
+                        </div>
+                    </div>
+                    
+                    <!-- Panel aktualnych gemów bieżącego seta -->
+                    <div class="pro-tennis-current-set-games">
+                        <div class="pro-tennis-games player1">
+                            <div class="pro-tennis-games-value" id="pro-tennis-player1-games">0</div>
+                        </div>
+                        <div class="pro-tennis-games player2">
+                            <div class="pro-tennis-games-value" id="pro-tennis-player2-games">0</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Panel aktualnego gema -->
+                    <div class="pro-tennis-current-game">
+                        <div class="pro-tennis-game-points player1">
+                            <div class="pro-tennis-point" id="pro-tennis-player1-points">0</div>
+                        </div>
+                        <div class="pro-tennis-game-points player2">
+                            <div class="pro-tennis-point" id="pro-tennis-player2-points">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Wskaźnik tie-breaka i aktualnego seta -->
+                <div class="pro-tennis-indicators">
+                    <div class="pro-tennis-set-indicator" id="pro-tennis-set-indicator">SET 1</div>
+                    <div class="pro-tennis-tiebreak" id="pro-tennis-tiebreak-indicator">TIEBREAK</div>
+                </div>
+            </div>
+        </div>
+
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/enhanced-scoreboards.js"></script>
+</body>
+</html>

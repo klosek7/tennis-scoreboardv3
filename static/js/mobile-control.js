@@ -49,6 +49,59 @@ const TennisControlPanel = (function() {
         darkModeToggle.checked = true;
       }
     }
+
+    /**
+ * Aktualizacja szablonu tablicy wyników
+ */
+function updateScoreboardTemplate() {
+  if (!currentMatch) {
+    showNotification('Nie ma aktywnego meczu. Rozpocznij nowy mecz.', 'warning');
+    return;
+  }
+  
+  const templateSelect = document.getElementById('scoreboard-template');
+  if (!templateSelect) return;
+  
+  const selectedTemplate = templateSelect.value;
+  
+  // Wysłanie do API
+  fetch('/api/scoreboard-template', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      template: selectedTemplate
+    }),
+  })
+  .then(handleApiResponse)
+  .then(data => {
+    showNotification(`Szablon tablicy wyników został zmieniony na: ${selectedTemplate}`, 'success');
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Wystąpił błąd podczas zmiany szablonu: ' + error.message, 'error');
+  });
+}
+
+    /**
+ * Inicjalizacja formularza wyboru szablonu
+ */
+function initTemplateForm() {
+  // Pobranie elementów formularza
+  const templateSelect = document.getElementById('scoreboard-template');
+  const updateTemplateBtn = document.getElementById('update-template-btn');
+  
+  if (!templateSelect || !updateTemplateBtn) return;
+  
+  // Aktualizacja wyboru szablonu na podstawie aktualnego meczu
+  if (currentMatch && currentMatch.appearance && currentMatch.appearance.template) {
+    templateSelect.value = currentMatch.appearance.template;
+  }
+  
+  // Dodanie obsługi zdarzenia kliknięcia przycisku
+  updateTemplateBtn.addEventListener('click', updateScoreboardTemplate);
+}
     
     /**
      * Ustawienie nasłuchiwania na zdarzenia
@@ -175,12 +228,34 @@ const TennisControlPanel = (function() {
    * Uruchomienie automatycznego odświeżania danych
    */
   function startDataRefresher() {
-    setInterval(() => {
-      loadMatchData();
+    let isScrolling = false;
+    let scrollTimeout;
+    let lastMatchesRefresh = 0;
+    const MATCHES_REFRESH_INTERVAL = 5000; // Rzadziej odświeżamy listę meczów (co 5 sekund)
+    
+    // Wykrywanie przewijania
+    window.addEventListener('scroll', function() {
+      isScrolling = true;
+      clearTimeout(scrollTimeout);
       
-      // Odświeżanie listy meczów tylko na zakładce ustawień
-      if (isTabActive('setup')) {
-        loadPreviousMatches();
+      // Ustaw flagę przewijania na false po 200ms bez przewijania
+      scrollTimeout = setTimeout(function() {
+        isScrolling = false;
+      }, 200);
+    });
+    
+    setInterval(() => {
+      // Nie odświeżaj danych podczas przewijania
+      if (!isScrolling) {
+        // Zawsze odświeżaj dane meczu
+        loadMatchData();
+        
+        // Odświeżaj listę meczów rzadziej i tylko gdy jesteśmy na zakładce ustawień
+        const currentTime = Date.now();
+        if (isTabActive('setup') && currentTime - lastMatchesRefresh > MATCHES_REFRESH_INTERVAL) {
+          loadPreviousMatches();
+          lastMatchesRefresh = currentTime;
+        }
       }
     }, REFRESH_INTERVAL);
   }
@@ -250,35 +325,66 @@ const TennisControlPanel = (function() {
     }
   }
   /**
-   * Pobranie danych o aktualnym meczu
-   */
-  function loadMatchData() {
-    fetch('/api/current-match')
-      .then(handleApiResponse)
-      .then(data => {
-        const hasMatchChanged = !currentMatch || currentMatch.id !== data.id;
-        currentMatch = data;
-        
-        updateScoreDisplay(data);
-        updateButtonsState(data);
-        updateMatchTimes(data);
-        
-        // Aktualizacja pól formularza, jeśli zmienił się mecz
-        if (hasMatchChanged) {
-          updateFormFields(data);
-        }
-        
-        // Aktualizacja statusu meczu
-        updateMatchInfo(data);
-        
-        // Aktualizacja linku do statystyk
-        updateStatsLink(data);
-      })
-      .catch(error => {
-        console.error('Błąd pobierania danych meczu:', error);
-        updateMatchInfo(null);
-      });
+ * Pobranie danych o aktualnym meczu
+ */
+
+  /**
+ * Inicjalizacja kontenerów dla wyświetlania setów
+ */
+function initSetsDisplayContainers(match) {
+  // Sprawdzenie czy kontenery istnieją i ew. ich utworzenie, jeśli nie
+  const player1SetsContainer = document.getElementById('player1-sets');
+  const player2SetsContainer = document.getElementById('player2-sets');
+  
+  if (!player1SetsContainer || !player2SetsContainer) {
+    console.error('Nie znaleziono kontenerów na sety w HTML');
+    return;
   }
+  
+  // Upewniamy się, że kontenery są puste przed dodaniem nowych elementów
+  player1SetsContainer.innerHTML = '';
+  player2SetsContainer.innerHTML = '';
+  
+  // Określenie maksymalnej liczby setów
+  const maxSets = match.sets_to_win === 3 ? 5 : 3;
+  
+  // Dodanie dla debugowania - warto wyświetlić w konsoli informację o liczbie setów
+  console.log(`Inicjalizacja setów do wyświetlenia. Format meczu: do ${match.sets_to_win} wygranych, max setów: ${maxSets}`);
+  
+  // Aktualizacja wyświetlania setów dla obu graczy
+  updateSetsDisplay(match, 'player1');
+  updateSetsDisplay(match, 'player2');
+}
+function loadMatchData() {
+  fetch('/api/current-match')
+    .then(handleApiResponse)
+    .then(data => {
+      const hasMatchChanged = !currentMatch || currentMatch.id !== data.id;
+      currentMatch = data;
+      
+      updateScoreDisplay(data);
+      updateButtonsState(data);
+      updateMatchTimes(data);
+      
+      // Aktualizacja pól formularza, jeśli zmienił się mecz
+      if (hasMatchChanged) {
+        updateFormFields(data);
+        
+        // Inicjalizacja kontenera setów przy pierwszym ładowaniu
+        initSetsDisplayContainers(data);
+      }
+      
+      // Aktualizacja statusu meczu
+      updateMatchInfo(data);
+      
+      // Aktualizacja linku do statystyk
+      updateStatsLink(data);
+    })
+    .catch(error => {
+      console.error('Błąd pobierania danych meczu:', error);
+      updateMatchInfo(null);
+    });
+}
   
   /**
    * Aktualizacja informacji o meczu
@@ -447,110 +553,122 @@ const TennisControlPanel = (function() {
     }, 3000);
   }
   
-  /**
-   * Aktualizacja wyświetlania wyniku
-   */
-  function updateScoreDisplay(match) {
-    if (!match) return;
-    
-    // Nazwy zawodników i oznaczenie serwującego/zwycięzcy
-    const player1NameEl = document.getElementById('score-player1-name');
-    if (player1NameEl) {
-      player1NameEl.innerHTML = 
-        `<span id="control-serving1" style="display: ${match.serving_player === 1 ? 'inline-block' : 'none'};">⚪</span>
-         ${match.player1}
-         <span id="control-winner1" style="display: ${match.winner === 1 ? 'inline-block' : 'none'};">👑</span>`;
+/**
+ * Aktualizacja wyświetlania wyniku
+ */
+function updateScoreDisplay(match) {
+  if (!match) return;
+
+  // Nazwy zawodników i oznaczenie serwującego/zwycięzcy
+  const player1NameEl = document.getElementById('score-player1-name');
+  if (player1NameEl) {
+    player1NameEl.innerHTML = 
+      `<span id="control-serving1" style="display: ${match.serving_player === 1 ? 'inline-block' : 'none'};">⚪</span>
+       ${match.player1}
+       <span id="control-winner1" style="display: ${match.winner === 1 ? 'inline-block' : 'none'};">👑</span>`;
+  }
+  
+  const player2NameEl = document.getElementById('score-player2-name');
+  if (player2NameEl) {
+    player2NameEl.innerHTML = 
+      `<span id="control-serving2" style="display: ${match.serving_player === 2 ? 'inline-block' : 'none'};">⚪</span>
+       ${match.player2}
+       <span id="control-winner2" style="display: ${match.winner === 2 ? 'inline-block' : 'none'};">👑</span>`;
+  }
+  
+  // Punkty
+  const p1PointsEl = document.getElementById('player1-points');
+  if (p1PointsEl) {
+    p1PointsEl.textContent = match.score.player1.points;
+    console.log(`Aktualizacja punktów player1: ${match.score.player1.points}`);
+  } else {
+    console.error('Element player1-points nie znaleziony!');
+  }
+  
+  const p2PointsEl = document.getElementById('player2-points');
+  if (p2PointsEl) {
+    p2PointsEl.textContent = match.score.player2.points;
+    console.log(`Aktualizacja punktów player2: ${match.score.player2.points}`);
+  } else {
+    console.error('Element player2-points nie znaleziony!');
+  }
+  
+  // Gemy
+  const p1GamesEl = document.getElementById('player1-games');
+  if (p1GamesEl) {
+    p1GamesEl.textContent = match.score.player1.games;
+    console.log(`Aktualizacja gemów player1: ${match.score.player1.games}`);
+  } else {
+    console.error('Element player1-games nie znaleziony!');
+  }
+  
+  const p2GamesEl = document.getElementById('player2-games');
+  if (p2GamesEl) {
+    p2GamesEl.textContent = match.score.player2.games;
+    console.log(`Aktualizacja gemów player2: ${match.score.player2.games}`);
+  } else {
+    console.error('Element player2-games nie znaleziony!');
+  }
+  
+  // Dynamiczne aktualizowanie setów dla obu graczy
+  updateSetsDisplay(match, 'player1');
+  updateSetsDisplay(match, 'player2');
+  
+  // Aktualizacja stanu przycisków
+  const endMatchBtn = document.getElementById('end-match-btn');
+  if (endMatchBtn) {
+    if (match.winner > 0) {
+      endMatchBtn.textContent = 'Mecz zakończony';
+      endMatchBtn.disabled = true;
+    } else {
+      endMatchBtn.textContent = 'Zakończ mecz';
+      endMatchBtn.disabled = false;
     }
-    
-    const player2NameEl = document.getElementById('score-player2-name');
-    if (player2NameEl) {
-      player2NameEl.innerHTML = 
-        `<span id="control-serving2" style="display: ${match.serving_player === 2 ? 'inline-block' : 'none'};">⚪</span>
-         ${match.player2}
-         <span id="control-winner2" style="display: ${match.winner === 2 ? 'inline-block' : 'none'};">👑</span>`;
-    }
-    
-    // Punkty
-    const p1PointsEl = document.getElementById('score-player1-points');
-    if (p1PointsEl) p1PointsEl.textContent = match.score.player1.points;
-    
-    const p2PointsEl = document.getElementById('score-player2-points');
-    if (p2PointsEl) p2PointsEl.textContent = match.score.player2.points;
-    
-    // Gemy
-    const p1GamesEl = document.getElementById('score-player1-games');
-    if (p1GamesEl) p1GamesEl.textContent = match.score.player1.games;
-    
-    const p2GamesEl = document.getElementById('score-player2-games');
-    if (p2GamesEl) p2GamesEl.textContent = match.score.player2.games;
-    
-    // Sety - maksymalnie 5
-    const maxSets = match.sets_to_win === 3 ? 5 : 3;
-    
-    // Tworzymy kontenery na sety, jeśli nie istnieją
-    const p1SetsContainer = document.getElementById('player1-sets');
-    const p2SetsContainer = document.getElementById('player2-sets');
-    
-    if (p1SetsContainer) {
-      // Wyczyszczenie kontenerów
-      p1SetsContainer.innerHTML = '';
+  }
+}
+/**
+ * Funkcja do dynamicznej aktualizacji wyświetlania setów
+ */
+function updateSetsDisplay(match, playerKey) {
+  const setsContainer = document.getElementById(`${playerKey}-sets`);
+  
+  if (!setsContainer) {
+    console.error(`Element ${playerKey}-sets nie znaleziony`);
+    return;
+  }
+  
+  // Wyczyszczenie kontenera
+  setsContainer.innerHTML = '';
+  
+  // Określenie maksymalnej liczby setów bazując na formacie meczu (sets_to_win)
+  const maxSets = match.sets_to_win === 3 ? 5 : 3;
+  
+  // Tworzenie elementów setów
+  for (let i = 0; i < maxSets; i++) {
+    // Sprawdzenie czy ten set powinien być wyświetlany
+    if (i === 0 || 
+        match.current_set > i || 
+        match.score.player1.sets[i] > 0 || 
+        match.score.player2.sets[i] > 0) {
       
-      // Generowanie setów
-      for (let i = 0; i < maxSets; i++) {
-        // Tworzenie tylko tych setów, które są potrzebne
-        if (i === 0 || match.current_set > i || match.score.player1.sets[i] > 0 || match.score.player2.sets[i] > 0) {
-          const setSpan = document.createElement('span');
-          setSpan.id = `score-player1-set${i}`;
-          setSpan.textContent = match.score.player1.sets[i];
-          
-          // Dodanie separatora po każdym secie oprócz ostatniego
-          if (i < maxSets - 1) {
-            const separator = document.createTextNode(' / ');
-            p1SetsContainer.appendChild(setSpan);
-            p1SetsContainer.appendChild(separator);
-          } else {
-            p1SetsContainer.appendChild(setSpan);
-          }
-        }
-      }
-    }
-    
-    if (p2SetsContainer) {
-      // Wyczyszczenie kontenerów
-      p2SetsContainer.innerHTML = '';
+      // Tworzenie elementu setu
+      const setBox = document.createElement('div');
+      setBox.className = 'set-box';
+      setBox.id = `${playerKey}-set${i}`;
+      setBox.textContent = match.score[playerKey].sets[i];
       
-      // Generowanie setów
-      for (let i = 0; i < maxSets; i++) {
-        // Tworzenie tylko tych setów, które są potrzebne
-        if (i === 0 || match.current_set > i || match.score.player1.sets[i] > 0 || match.score.player2.sets[i] > 0) {
-          const setSpan = document.createElement('span');
-          setSpan.id = `score-player2-set${i}`;
-          setSpan.textContent = match.score.player2.sets[i];
-          
-          // Dodanie separatora po każdym secie oprócz ostatniego
-          if (i < maxSets - 1) {
-            const separator = document.createTextNode(' / ');
-            p2SetsContainer.appendChild(setSpan);
-            p2SetsContainer.appendChild(separator);
-          } else {
-            p2SetsContainer.appendChild(setSpan);
-          }
-        }
-      }
-    }
-    
-    // Zaktualizuj tekst przycisku zakończenia meczu
-    const endMatchBtn = document.getElementById('end-match-btn');
-    if (endMatchBtn) {
-      if (match.winner > 0) {
-        endMatchBtn.textContent = 'Mecz zakończony';
-        endMatchBtn.disabled = true;
-      } else {
-        endMatchBtn.textContent = 'Zakończ mecz';
-        endMatchBtn.disabled = false;
+      setsContainer.appendChild(setBox);
+      
+      // Dodanie separatora między setami (oprócz ostatniego)
+      if (i < maxSets - 1) {
+        const separator = document.createElement('span');
+        separator.textContent = ' / ';
+        separator.style.margin = '0 3px';
+        setsContainer.appendChild(separator);
       }
     }
   }
+}
   
   /**
    * Aktualizacja stanu przycisków
@@ -673,6 +791,8 @@ const TennisControlPanel = (function() {
       servingPlayer1Radio.checked = match.serving_player === 1;
       servingPlayer2Radio.checked = match.serving_player === 2;
     }
+
+    initTemplateForm();
   }
   /**
    * Aktualizacja linku do statystyk
@@ -898,55 +1018,92 @@ const TennisControlPanel = (function() {
     const matchesContainer = document.getElementById('previous-matches');
     if (!matchesContainer) return;
     
-    matchesContainer.innerHTML = '<p class="loading-text">Ładowanie poprzednich meczów...</p>';
+    // Zapisujemy wysokość kontenera przed aktualizacją, aby uniknąć skakania
+    const containerHeight = matchesContainer.offsetHeight;
+    
+    // Jeśli to pierwsze ładowanie, pokaż komunikat o ładowaniu
+    if (matchesContainer.innerHTML.trim() === '') {
+      matchesContainer.innerHTML = '<p class="loading-text">Ładowanie poprzednich meczów...</p>';
+    }
+    
+    // Zapisz aktualną pozycję przewijania
+    const scrollPosition = window.scrollY;
+    
+    // Dodajemy stałą wysokość do kontenera, aby uniknąć zmiany rozmiaru
+    if (containerHeight > 0) {
+      matchesContainer.style.minHeight = containerHeight + 'px';
+    }
     
     fetch('/api/matches')
       .then(handleApiResponse)
       .then(matches => {
+        // Przygotuj nową zawartość przed wstawieniem
+        let html = '';
         if (matches.length === 0) {
-          matchesContainer.innerHTML = '<p class="empty-message">Brak zapisanych meczów.</p>';
-          return;
+          html = '<p class="empty-message">Brak zapisanych meczów.</p>';
+        } else {
+          matches.forEach(match => {
+            const statusBadge = match.completed ? 
+              '<span style="color: #10B981;">✓</span>' : 
+              '<span style="color: #F59E0B;">⏱</span>';
+            
+            html += `
+              <div class="match-card">
+                <div class="match-card-header">
+                  <div class="match-title">${match.player1} vs ${match.player2}</div>
+                  <div class="match-date">${formatDate(match.date)}</div>
+                </div>
+                <div class="match-result">
+                  <div>Wynik: ${match.score} ${statusBadge}</div>
+                  <div>Czas: ${match.duration || "-"}</div>
+                </div>
+                <div class="match-actions">
+                  <button class="primary load-match-btn" data-id="${match.id}">
+                    <i class="fas fa-folder-open"></i> Załaduj
+                  </button>
+                  <button class="view-history-btn" data-id="${match.id}">
+                    <i class="fas fa-history"></i> Historia
+                  </button>
+                  <button class="view-stats-btn" data-id="${match.id}">
+                    <i class="fas fa-chart-bar"></i> Statystyki
+                  </button>
+                </div>
+              </div>
+            `;
+          });
         }
         
-        let html = '';
-        matches.forEach(match => {
-          const statusBadge = match.completed ? 
-            '<span style="color: #10B981;">✓</span>' : 
-            '<span style="color: #F59E0B;">⏱</span>';
-          
-          html += `
-            <div class="match-card">
-              <div class="match-card-header">
-                <div class="match-title">${match.player1} vs ${match.player2}</div>
-                <div class="match-date">${formatDate(match.date)}</div>
-              </div>
-              <div class="match-result">
-                <div>Wynik: ${match.score} ${statusBadge}</div>
-                <div>Czas: ${match.duration || "-"}</div>
-              </div>
-              <div class="match-actions">
-                <button class="primary load-match-btn" data-id="${match.id}">
-                  <i class="fas fa-folder-open"></i> Załaduj
-                </button>
-                <button class="view-history-btn" data-id="${match.id}">
-                  <i class="fas fa-history"></i> Historia
-                </button>
-                <button class="view-stats-btn" data-id="${match.id}">
-                  <i class="fas fa-chart-bar"></i> Statystyki
-                </button>
-              </div>
-            </div>
-          `;
-        });
-        
+        // Teraz aktualizuj DOM w jednej operacji
         matchesContainer.innerHTML = html;
         
         // Dodanie obsługi zdarzeń dla przycisków
         setupMatchButtons();
+        
+        // Przywróć pozycję przewijania
+        setTimeout(() => {
+          window.scrollTo({
+            top: scrollPosition,
+            behavior: 'auto'
+          });
+          
+          // Po załadowaniu możemy usunąć minHeight, ale dopiero po przywróceniu przewijania
+          setTimeout(() => {
+            matchesContainer.style.minHeight = '';
+          }, 100);
+        }, 10);
       })
       .catch(error => {
         console.error('Error:', error);
         matchesContainer.innerHTML = '<p class="empty-message">Nie udało się załadować meczów. Spróbuj ponownie później.</p>';
+        
+        // Przywróć pozycję przewijania w przypadku błędu
+        setTimeout(() => {
+          window.scrollTo({
+            top: scrollPosition,
+            behavior: 'auto'
+          });
+          matchesContainer.style.minHeight = '';
+        }, 10);
       });
   }
   /**

@@ -62,6 +62,7 @@
             <!-- Punktacja -->
             <div class="scoreboard-control">
                 <!-- Zawodnik 1 -->
+                <!-- Panel kontrolny, sekcja dla gracza 1 -->
                 <div class="player-row" id="player1-row">
                     <div class="player-info">
                         <div class="serving-indicator" id="serving1"></div>
@@ -69,10 +70,8 @@
                         <div class="winner-badge" id="winner1-badge">Zwycięzca</div>
                     </div>
                     <div class="score-display">
-                        <div class="sets-display">
-                            <div class="set-box" id="player1-set0">0</div>
-                            <div class="set-box" id="player1-set1">0</div>
-                            <div class="set-box" id="player1-set2">0</div>
+                        <div class="sets-display" id="player1-sets">
+                            <!-- Sety będą dynamicznie generowane przez JavaScript -->
                         </div>
                         <div class="games-display" id="player1-games">0</div>
                         <div class="points-display" id="player1-points">0</div>
@@ -87,32 +86,30 @@
                     </div>
                 </div>
 
-                <!-- Zawodnik 2 -->
-                <div class="player-row" id="player2-row">
-                    <div class="player-info">
-                        <div class="serving-indicator" id="serving2"></div>
-                        <div class="player-name" id="score-player2-name">Zawodnik 2</div>
-                        <div class="winner-badge" id="winner2-badge">Zwycięzca</div>
-                    </div>
-                    <div class="score-display">
-                        <div class="sets-display">
-                            <div class="set-box" id="player2-set0">0</div>
-                            <div class="set-box" id="player2-set1">0</div>
-                            <div class="set-box" id="player2-set2">0</div>
+                    <!-- Zawodnik 2 -->
+                    <div class="player-row" id="player2-row">
+                        <div class="player-info">
+                            <div class="serving-indicator" id="serving2"></div>
+                            <div class="player-name" id="score-player2-name">Zawodnik 2</div>
+                            <div class="winner-badge" id="winner2-badge">Zwycięzca</div>
                         </div>
-                        <div class="games-display" id="player2-games">0</div>
-                        <div class="points-display" id="player2-points">0</div>
+                        <div class="score-display">
+                            <div class="sets-display" id="player2-sets">
+                                <!-- Sety będą dynamicznie generowane przez JavaScript -->
+                            </div>
+                            <div class="games-display" id="player2-games">0</div>
+                            <div class="points-display" id="player2-points">0</div>
+                        </div>
+                        <div class="player-controls">
+                            <button class="control-button add-point" id="add-point-btn2">
+                                <i class="fas fa-plus"></i> Punkt
+                            </button>
+                            <button class="control-button remove-point" id="remove-point-btn2">
+                                <i class="fas fa-minus"></i> Cofnij
+                            </button>
+                        </div>
                     </div>
-                    <div class="player-controls">
-                        <button class="control-button add-point" id="add-point-btn2">
-                            <i class="fas fa-plus"></i> Punkt
-                        </button>
-                        <button class="control-button remove-point" id="remove-point-btn2">
-                            <i class="fas fa-minus"></i> Cofnij
-                        </button>
                     </div>
-                </div>
-            </div>
             <!-- Akcje meczu -->
             <div class="match-actions">
                 <button class="action-button secondary" id="toggle-serving-btn">
@@ -247,6 +244,42 @@
                         <button type="button" id="update-appearance-btn" class="primary-button">Zastosuj zmiany</button>
                         <button type="button" id="reset-appearance-btn" class="secondary-button">Resetuj ustawienia</button>
                     </div>
+                </form>
+            </div>
+
+            <div class="settings-section">
+                <h2>Wybór tablicy wyników</h2>
+                <form id="scoreboard-template-form">
+                    <div class="form-group">
+                        <label for="scoreboard-template">Szablon tablicy wyników:</label>
+                        <select id="scoreboard-template">
+                            <option value="original">Oryginalny</option>
+                            <option value="horizontal">Horyzontalny (na górze ekranu)</option>
+                            <option value="vertical">Wertykalny (z boku ekranu)</option>
+                            <option value="modern">Nowoczesny duży</option>
+                            <option value="broadcast">Telewizyjny</option>
+                            <option value="pro-tennis">Pro Tennis TV</option>
+                        </select>
+                        <div class="help-text">
+                            Wybierz szablon tablicy wyników dla transmisji OBS. 
+                            Zmiany będą widoczne natychmiast dla wszystkich otwartych tablic.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group switch-container">
+                        <label>Instrukcje dla streamera:</label>
+                        <div class="help-text">
+                            <ol>
+                                <li><strong>Horyzontalny:</strong> Szerokość: 1920px, Wysokość: 150px</li>
+                                <li><strong>Wertykalny:</strong> Szerokość: 300px, Wysokość: 700px</li>
+                                <li><strong>Nowoczesny:</strong> Szerokość: 800px, Wysokość: 400px</li>
+                                <li><strong>Telewizyjny:</strong> Szerokość: 1200px, Wysokość: 400px</li>
+                                <li><strong>Pro Tennis TV:</strong> Szerokość: 400px, Wysokość: 100px</li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="update-template-btn" class="primary-button">Zastosuj wybrany szablon</button>
                 </form>
             </div>
 

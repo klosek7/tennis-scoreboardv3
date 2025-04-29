@@ -19,6 +19,8 @@ def register_routes(app):
             app.logger.error(f"Szablon {template_name} nie istnieje w {template_path}")
         return exists
     
+
+    
     @app.before_request
     def before_request():
         """Funkcja wywoływana przed każdym żądaniem"""
@@ -54,6 +56,52 @@ def register_routes(app):
         """Tablica wyników do wyświetlania w OBS"""
         app.logger.info("Renderowanie scoreboard.html")
         return render_template('scoreboard.html')
+    
+    @app.route('/enhanced-scoreboards')
+    def enhanced_scoreboards():
+        """Rozszerzone tablice wyników do wyświetlania w OBS"""
+        app.logger.info("Renderowanie enhanced-scoreboards.html")
+        return render_template('enhanced-scoreboards.html')
+    
+    # API - Aktualizacja szablonu tablicy wyników
+    @app.route('/api/scoreboard-template', methods=['POST'])
+    def update_scoreboard_template():
+        """Aktualizacja szablonu tablicy wyników"""
+        current_match = match_context.get_current_match()
+        
+        if not current_match:
+            return jsonify({"error": "Brak aktywnego meczu"}), 404
+        
+        try:
+            data = request.json
+            
+            # Aktualizacja konfiguracji wyglądu
+            if "appearance" not in current_match:
+                from app.models import DEFAULT_APPEARANCE
+                current_match["appearance"] = DEFAULT_APPEARANCE.copy()
+            
+            # Dodanie pola template do appearance, jeśli nie istnieje
+            if "template" not in current_match["appearance"]:
+                current_match["appearance"]["template"] = "original"
+            
+            # Aktualizacja szablonu
+            if "template" in data:
+                template = data["template"]
+                # Sprawdzenie czy template jest jednym z dozwolonych
+                allowed_templates = ["original", "horizontal", "vertical", "modern", "broadcast", "pro-tennis"]
+                if template in allowed_templates:
+                    current_match["appearance"]["template"] = template
+                else:
+                    return jsonify({"error": f"Niedozwolony szablon: {template}"}), 400
+            
+            # Zapisanie meczu
+            match_context.set_current_match(current_match)
+            save_match(current_match)
+            
+            return jsonify({"template": current_match["appearance"]["template"]})
+        except Exception as e:
+            print(f"Błąd podczas aktualizacji szablonu: {e}")
+            return jsonify({"error": str(e)}), 500
     
     @app.route('/control')
     def control_panel():

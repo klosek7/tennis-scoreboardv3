@@ -1,0 +1,1106 @@
+/**
+ * Style dla rozszerzonych tablic wyników tenisa
+ */
+
+/* Reset i zmienne */
+:root {
+    /* Bazowe kolory */
+    --bg-color: #111111;
+    --header-bg: #1a1a1a;
+    --footer-bg: #1a1a1a;
+    --text-color: #ffffff;
+    --player1-color: #388e3c; /* Domyślny kolor (Wimbledon green) */
+    --player2-color: #1a1a1a; /* Domyślny kolor dla drugiego zawodnika */
+    --header-height: 50px;
+    --footer-height: 40px;
+    --player-row-height: 70px;
+    --accent-color: #ffc107; /* Żółty */
+    --cell-border-color: rgba(255, 255, 255, 0.1);
+    
+    /* Szerokości kolumn */
+    --set-col-width: 100px;
+    --games-col-width: 100px;
+    --points-col-width: 120px;
+    
+    /* Przejścia */
+    --transition-time: 0.3s;
+  
+    /* Rozmiary dla wersji HD (1920x1080) */
+    --hd-header-height: 70px;
+    --hd-footer-height: 60px;
+    --hd-player-row-height: 100px;
+  }
+    
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+    
+  body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: transparent;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Panel wyboru szablonu (widoczny tylko podczas konfiguracji) */
+  .template-selector {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    gap: 10px;
+  }
+  
+  .template-selector select, 
+  .template-selector button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .template-selector button {
+    background-color: var(--accent-color);
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .template-selector button:hover {
+    background-color: #e0aa00;
+  }
+  
+  /* Style dla wszystkich szablonów */
+  .template {
+    display: none;
+    margin-top: 50px; /* Dla panelu wyboru */
+  }
+  
+  .template.active {
+    display: block;
+  }
+  
+  /* Animacje dla zmian punktów - wspólne dla wszystkich szablonów */
+  @keyframes scoreChange {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); color: var(--accent-color); }
+    100% { transform: scale(1); }
+  }
+  
+  .animate-point {
+    animation: scoreChange 0.7s ease;
+  }
+  
+  @keyframes gameChange {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+  }
+  
+  .animate-game {
+    animation: gameChange 0.7s ease;
+  }
+  
+  @keyframes setChange {
+    0% { background-color: rgba(255, 193, 7, 0.3); }
+    100% { background-color: transparent; }
+  }
+  
+  .animate-set {
+    animation: setChange 1s ease;
+  }
+  
+  .serving-indicator {
+    width: 12px;
+    height: 12px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    margin-right: 10px;
+    display: none;
+  }
+  
+  .serving-indicator.active {
+    display: block;
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+  
+  .winner-badge {
+    background-color: var(--accent-color);
+    color: #000;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: 700;
+    display: none;
+  }
+  
+  .winner-badge.active {
+    display: inline-block;
+  }
+  
+  .tiebreak-indicator {
+    color: var(--accent-color);
+    font-weight: 500;
+    display: none;
+  }
+  
+  .tiebreak-indicator.active {
+    display: block;
+  }
+  /* Styl #1: Horyzontalny (na górze ekranu) */
+.horizontal-board {
+    width: 100%;
+    max-width: 1920px;
+    height: 150px;
+    background-color: var(--bg-color);
+    border-radius: 0 0 15px 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-family: 'Oswald', sans-serif;
+  }
+  
+  .horizontal-content {
+    display: flex;
+    height: 100%;
+  }
+  
+  .logo-section {
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .logo-section .tournament-logo {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .logo-section .tournament-logo img {
+    max-width: 130px;
+    max-height: 130px;
+  }
+  
+  .players-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .player-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 20px;
+    height: 100%;
+  }
+  
+  .player-block.player1 {
+    background-color: var(--player1-color);
+  }
+  
+  .player-block.player2 {
+    background-color: var(--player2-color);
+  }
+  
+  .player-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .player-name {
+    font-size: 24px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .horizontal-score {
+    display: flex;
+    align-items: center;
+  }
+  
+  .sets-display {
+    display: flex;
+    margin-right: 20px;
+  }
+  
+  .set-box {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    margin-right: 5px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+  .games, .points {
+    width: 60px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    margin-right: 15px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 26px;
+  }
+  
+  .points {
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 70px;
+  }
+  
+  .divider {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .info-section {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .set-info, .time-info, .tiebreak-indicator {
+    margin: 5px 0;
+    font-size: 16px;
+    text-align: center;
+  }
+  /* Styl #2: Wertykalny (z boku ekranu) */
+.vertical-board {
+    width: 300px;
+    height: auto;
+    max-height: 100vh;
+    background-color: var(--bg-color);
+    border-radius: 0 15px 15px 0;
+    overflow: hidden;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+    font-family: 'Oswald', sans-serif;
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+  
+  .vertical-header {
+    padding: 15px;
+    background-color: var(--header-bg);
+    text-align: center;
+  }
+  
+  .vertical-header .tournament-logo {
+    margin-bottom: 10px;
+  }
+  
+  .vertical-header .tournament-logo img {
+    max-height: 60px;
+    max-width: 200px;
+  }
+  
+  .vertical-header .match-status {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .vertical-players {
+    padding: 15px;
+  }
+  
+  .vertical-player {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .vertical-player.player1 {
+    background-color: var(--player1-color);
+  }
+  
+  .vertical-player.player2 {
+    background-color: var(--player2-color);
+  }
+  
+  .vertical-player-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .vertical-player-header .player-name {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .vertical-score {
+    padding: 15px;
+  }
+  
+  .vertical-sets {
+    display: flex;
+    margin-bottom: 15px;
+    justify-content: center;
+  }
+  
+  .vertical-sets .set-box {
+    width: 36px;
+    height: 36px;
+    margin: 0 5px;
+  }
+  
+  .vertical-games, .vertical-points {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .vertical-games .label, .vertical-points .label {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .vertical-games .value, .vertical-points .value {
+    width: 60px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .vertical-footer {
+    padding: 15px;
+    background-color: var(--footer-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .vertical-footer > div {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  /* Styl #3: Nowoczesny duży */
+.modern-board {
+    width: 800px;
+    height: auto;
+    background-color: var(--bg-color);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-family: 'Oswald', sans-serif;
+    margin: 50px auto;
+  }
+  
+  .modern-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--header-bg);
+    height: 80px;
+  }
+  
+  .tournament-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .modern-header .tournament-logo {
+    margin-right: 15px;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modern-header .tournament-logo img {
+    max-height: 50px;
+    max-width: 50px;
+  }
+  
+  .modern-header .event-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .modern-match-status {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .status-text {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .tiebreak-label {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    background-color: var(--accent-color);
+    color: #000;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    display: none;
+  }
+  
+  .tiebreak-label.active {
+    display: block;
+  }
+  
+  .modern-players {
+    padding: 20px;
+  }
+  
+  .modern-player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .modern-player.player1 {
+    background-color: var(--player1-color);
+  }
+  
+  .modern-player.player2 {
+    background-color: var(--player2-color);
+  }
+  
+  .modern-player-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+  
+  .modern-player-info .serving-indicator {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .modern-player-name {
+    font-size: 28px;
+    font-weight: 700;
+    margin-right: 10px;
+  }
+  
+  .modern-player-score {
+    display: flex;
+    align-items: center;
+  }
+  
+  .modern-sets {
+    display: flex;
+    margin-right: 20px;
+  }
+  
+  .modern-set-box {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .modern-games-points {
+    display: flex;
+    align-items: center;
+  }
+  
+  .modern-games, .modern-points {
+    width: 70px;
+    height: 70px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 700;
+    border-radius: 8px;
+  }
+  
+  .modern-games {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .modern-points {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modern-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: var(--footer-bg);
+    font-size: 16px;
+  }
+  /* Styl #4: Telewizyjny */
+.broadcast-board {
+    width: 1200px;
+    height: auto;
+    background-color: transparent;
+    font-family: 'Oswald', sans-serif;
+    margin: 50px auto;
+    padding: 0;
+    position: relative;
+  }
+  
+  .broadcast-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    background-color: var(--bg-color);
+    padding: 15px 25px;
+    border-radius: 15px 15px 0 0;
+    height: 90px;
+    align-items: center;
+  }
+  
+  .broadcast-title-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .broadcast-logo {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .broadcast-logo img {
+    max-width: 50px;
+    max-height: 50px;
+  }
+  
+  .broadcast-title {
+    font-size: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .broadcast-status-section {
+    text-align: center;
+  }
+  
+  .broadcast-match-status {
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .broadcast-tiebreak {
+    display: none;
+    margin-top: 5px;
+    font-size: 16px;
+    color: var(--accent-color);
+    font-weight: 600;
+  }
+  
+  .broadcast-tiebreak.active {
+    display: block;
+  }
+  
+  .broadcast-time-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .broadcast-match-time,
+  .broadcast-set-time {
+    font-size: 16px;
+    margin: 3px 0;
+  }
+  
+  .broadcast-score-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 0 0 15px 15px;
+  }
+  
+  .broadcast-player-1,
+  .broadcast-player-2 {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .broadcast-player-1 {
+    background-color: var(--player1-color);
+  }
+  
+  .broadcast-player-2 {
+    background-color: var(--player2-color);
+  }
+  
+  .broadcast-player-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .broadcast-serving {
+    width: 18px;
+    height: 18px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    margin-right: 15px;
+    display: none;
+  }
+  
+  .broadcast-serving.active {
+    display: block;
+    animation: pulse 1.5s infinite;
+  }
+  
+  .broadcast-player-name {
+    font-size: 36px;
+    font-weight: 700;
+    flex: 1;
+  }
+  
+  .broadcast-winner {
+    background-color: var(--accent-color);
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: none;
+  }
+  
+  .broadcast-winner.active {
+    display: block;
+  }
+  
+  .broadcast-score-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .broadcast-sets {
+    display: flex;
+    gap: 8px;
+    margin-right: 20px;
+  }
+  
+  .broadcast-sets .set-box {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 600;
+  }
+  
+  .broadcast-games,
+  .broadcast-points {
+    width: 90px;
+    height: 90px;
+    background-color: rgba(0, 0, 0, 0.4);
+    margin-left: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 700;
+  }
+  
+  .broadcast-points {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100px;
+  }
+  
+  /* Responsywność dla wszystkich szablonów */
+  @media (max-width: 1400px) {
+    .broadcast-board {
+      width: 900px;
+    }
+    
+    .broadcast-player-name {
+      font-size: 28px;
+    }
+    
+    .broadcast-sets .set-box {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+    
+    .broadcast-games, .broadcast-points {
+      width: 70px;
+      height: 70px;
+      font-size: 36px;
+    }
+  }
+  
+  @media (max-width: 1000px) {
+    .broadcast-board {
+      width: 700px;
+    }
+    
+    .modern-board {
+      width: 600px;
+    }
+    
+    .horizontal-board {
+      height: 120px;
+    }
+    
+    .player-name {
+      font-size: 20px;
+    }
+    
+    .set-box, .games, .points {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+    }
+    
+    .points {
+      width: 40px;
+    }
+  }
+  /* Pro Tennis Scoreboard - styl inspirowany transmisjami telewizyjnymi */
+/* Dodaj ten kod do pliku enhanced-scoreboards.css */
+
+/* Główne style dla pro tennis scoreboard */
+.pro-tennis-board {
+  position: relative;
+  font-family: 'Oswald', sans-serif;
+  width: 400px;
+  height: auto;
+  background-color: transparent;
+}
+
+.pro-tennis-wrapper {
+  position: relative;
+}
+
+.pro-tennis-main {
+  display: flex;
+  height: 80px;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* Panel z nazwiskami zawodników */
+.pro-tennis-player-panel {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+}
+
+.pro-tennis-player {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding-left: 10px;
+  color: white;
+  position: relative;
+}
+
+.pro-tennis-player.player1 {
+  background-color: #111;
+}
+
+.pro-tennis-player.player2 {
+  background-color: #000;
+}
+
+.pro-tennis-serving {
+  width: 8px;
+  height: 8px;
+  background-color: #b3d335;
+  border-radius: 50%;
+  margin-right: 8px;
+  opacity: 0;
+}
+
+.pro-tennis-serving.active {
+  opacity: 1;
+}
+
+.pro-tennis-player-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Panel wyników setów */
+.pro-tennis-sets-panel {
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+}
+
+.pro-tennis-sets-container {
+  display: flex;
+  height: 40px;
+  background-color: transparent;
+}
+
+.pro-tennis-set {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.pro-tennis-set.current {
+  background-color: #b3d335;
+  color: #000;
+}
+
+.pro-tennis-set.completed {
+  background-color: #333;
+}
+
+/* Panel aktualnego gema */
+.pro-tennis-current-game {
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+}
+
+.pro-tennis-game-points {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  color: white;
+}
+
+.pro-tennis-game-points.player1 {
+  background-color: #b3d335;
+}
+
+.pro-tennis-game-points.player2 {
+  background-color: #86a028;
+}
+
+.pro-tennis-point {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Wskaźniki statusu meczu */
+.pro-tennis-indicators {
+  position: absolute;
+  top: -25px;
+  right: 0;
+  display: flex;
+  align-items: center;
+}
+
+.pro-tennis-set-indicator {
+  background-color: #b3d335;
+  color: #000;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 3px 3px 0 0;
+}
+
+.pro-tennis-tiebreak {
+  background-color: #ff4c4c;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 3px 3px 0 0;
+  margin-left: 5px;
+  display: none;
+}
+
+.pro-tennis-tiebreak.active {
+  display: block;
+}
+
+/* Animacje dla zmian punktów */
+@keyframes pro-tennis-point-change {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.pro-tennis-point.animate {
+  animation: pro-tennis-point-change 0.5s ease;
+}
+
+/* Responsywność */
+@media (max-width: 500px) {
+  .pro-tennis-board {
+      width: 100%;
+      max-width: 400px;
+  }
+  
+  .pro-tennis-player-panel {
+      width: 120px;
+  }
+  
+  .pro-tennis-player-name {
+      font-size: 16px;
+  }
+  
+  .pro-tennis-sets-panel {
+      width: auto;
+      flex: 1;
+  }
+  
+  .pro-tennis-set {
+      width: 30px;
+      font-size: 18px;
+  }
+  
+  .pro-tennis-current-game {
+      width: 50px;
+  }
+  
+  .pro-tennis-point {
+      font-size: 20px;
+  }
+}
+
+/* Panel wyników setów - zmniejsz szerokość aby zmieścić gemy */
+.pro-tennis-sets-panel {
+  display: flex;
+  flex-direction: column;
+  width: 120px; /* Zmniejszone z 180px */
+}
+
+/* Panel aktualnych gemów bieżącego seta */
+.pro-tennis-current-set-games {
+  display: flex;
+  flex-direction: column;
+  width: 50px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pro-tennis-games {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  color: white;
+}
+
+.pro-tennis-games.player1 {
+  background-color: #333;
+}
+
+.pro-tennis-games.player2 {
+  background-color: #222;
+}
+
+.pro-tennis-games-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Panel aktualnego gema - zaktualizuj aby był konsekwentny z nowymi stylami */
+.pro-tennis-current-game {
+  display: flex;
+  flex-direction: column;
+  width: 60px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animacje dla zmian gemów */
+@keyframes pro-tennis-game-change {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.pro-tennis-games-value.animate {
+  animation: pro-tennis-game-change 0.5s ease;
+}
+
+/* Zaktualizuj responsywność */
+@media (max-width: 500px) {
+  .pro-tennis-current-set-games {
+      width: 40px;
+  }
+  
+  .pro-tennis-games-value {
+      font-size: 18px;
+  }
+}

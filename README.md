@@ -11,8 +11,10 @@ Tennis Scoreboard to aplikacja webowa oparta na Flask, która umożliwia prowadz
 ## ✨ Funkcje
 
 - **Zarządzanie punktacją** - śledzenie punktów, gemów i setów
+- **Format meczu** - możliwość wyboru formatu do 2 lub 3 wygranych setów (maksymalnie 5 setów)
 - **Wskaźnik serwisu** - oznaczenie, który zawodnik aktualnie serwuje
 - **Zarządzanie wyglądem tablicy wyników** - dostosowywanie kolorów, tematów i animacji
+- **Różne szablony scoreboardów** - możliwość wyboru z wielu stylów wyświetlania wyników
 - **Responsywny design** - dostosowuje się do różnych urządzeń i rozmiarów ekranu
 - **Statystyki meczowe** - zapis i przeglądanie statystyk dla rozegranych meczów
 - **Dynamiczne sety** - automatyczne wyświetlanie setów w miarę postępu meczu
@@ -71,9 +73,31 @@ Tennis Scoreboard to aplikacja webowa oparta na Flask, która umożliwia prowadz
    - Przydzielaj punkty, gemy i sety zawodnikom
    - Zmieniaj zawodnika serwującego
    - Dostosowuj wygląd scoreboardu
+   - Wybieraj spośród różnych szablonów scoreboardu
    - Zakończ mecz i wyznacz zwycięzcę
 
-5. Scoreboard możesz otworzyć w nowym oknie przeglądarki i wyświetlić go na osobnym ekranie dla publiczności
+5. Scoreboard możesz otworzyć w nowym oknie przeglądarki i wyświetlić go na osobnym ekranie dla publiczności:
+   - Podstawowa tablica wyników: `/scoreboard`
+   - Rozszerzone tablice wyników: `/enhanced-scoreboards`
+
+## 📺 Szablony scoreboardu
+
+Aplikacja oferuje różne szablony scoreboardu dostosowane do różnych potrzeb:
+
+1. **Oryginalny** - klasyczny wygląd tablicy wyników
+2. **Horyzontalny** - szeroki pasek na górze ekranu (idealny na transmisję)
+3. **Wertykalny** - wąski pasek boczny (idealny do umieszczenia z boku ekranu)
+4. **Nowoczesny** - duży scoreboard z nowoczesnym wyglądem
+5. **Telewizyjny** - scoreboard w stylu profesjonalnych transmisji
+
+Wszystkie szablony można przełączać bezpośrednio z panelu kontrolnego w zakładce "Ustawienia".
+
+### Zalecane wymiary dla różnych szablonów
+
+- **Horyzontalny**: Szerokość: 1920px, Wysokość: 150px
+- **Wertykalny**: Szerokość: 300px, Wysokość: 700px
+- **Nowoczesny**: Szerokość: 800px, Wysokość: 400px
+- **Telewizyjny**: Szerokość: 1200px, Wysokość: 400px
 
 ## 📁 Struktura projektu
 
@@ -90,11 +114,13 @@ tennis-scoreboard/
 │   │   │   ├── control.css
 │   │   │   ├── index.css
 │   │   │   ├── scoreboard.css
+│   │   │   ├── enhanced-scoreboards.css
 │   │   │   └── statistics.css
 │   │   ├── js/
 │   │   │   ├── control.js
 │   │   │   ├── index.js
 │   │   │   ├── scoreboard.js
+│   │   │   ├── enhanced-scoreboards.js
 │   │   │   └── statistics.js
 │   │   └── img/
 │   └── templates/
@@ -102,6 +128,7 @@ tennis-scoreboard/
 │       ├── control.html
 │       ├── index.html
 │       ├── scoreboard.html
+│       ├── enhanced-scoreboards.html
 │       └── statistics.html
 ├── config.py
 ├── run.py
@@ -133,6 +160,16 @@ Aplikacja generuje szczegółowe statystyki meczowe, które są dostępne po zak
 - Czas trwania meczu i poszczególnych setów
 - Historia punktacji
 - Wykres przebiegu zdobywania punktów
+
+## 💡 Integracja z OBS Studio
+
+Aby użyć scoreboarda w transmisji OBS Studio:
+
+1. W OBS Studio dodaj nowe źródło typu "Przeglądarka" (Browser Source)
+2. Jako URL podaj adres scoreboarda (np. `http://localhost:5000/enhanced-scoreboards`)
+3. Ustaw odpowiednią szerokość i wysokość zgodnie z wybranym szablonem
+4. Z panelu kontrolnego wybierz żądany szablon scoreboarda
+5. Dostosuj kolory i logo według potrzeb
 
 ## 🔮 Planowane funkcje
 
